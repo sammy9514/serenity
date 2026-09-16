@@ -2,6 +2,7 @@ import AvailableApt from "./components/AvailableApt";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import WhyBookDirect from "./components/WhyBookDirect";
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
       <Hero />
       <div className=" mx-auto max-w-page px-6 ">
         <AvailableApt />
+        <WhyBookDirect />
       </div>
       <Footer />
     </div>

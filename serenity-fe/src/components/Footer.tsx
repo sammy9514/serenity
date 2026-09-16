@@ -1,22 +1,22 @@
 const Footer = () => {
   return (
-    <div className="mt-20 bg-ink text-cream font-body">
-      <div className="mx-auto flex h-25 max-w-page items-center justify-between px-6">
+    <footer className="mt-20 bg-ink text-cream">
+      <div className="mx-auto flex max-w-page items-center justify-between px-6 py-8 flex-col gap-4 md:flex-row">
         <div className="flex flex-col ">
-          <h1 className="text-xl tracking-widest">
+          <span className="text-sm md:text-xl tracking-widest">
             Serenity Space Luxury Homes
-          </h1>
-          <h4 className="text-xs tracking-widest text-line">
-            London·Email·Phone
-          </h4>
+          </span>
+          <span className="text-xs tracking-widest text-line">
+            London · Email · Phone
+          </span>
         </div>
-        <nav className="flex gap-5 text-taupe text-sm">
+        <nav className="flex gap-5 text-taupe text-xs md:text-sm">
           <a href="#">Instagram</a>
           <a href="#">House Rules</a>
           <a href="#">Privacy</a>
         </nav>
       </div>
-    </div>
+    </footer>
   );
 };
 

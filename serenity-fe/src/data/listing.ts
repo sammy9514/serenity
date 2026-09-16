@@ -3,10 +3,10 @@ interface Listing {
   name: string;
   summary: string;
   pricePerNight: number;
-  sleeps: 6;
+  sleeps: number;
 }
 
-export const listing: Listing[] = [
+export const listings: Listing[] = [
   {
     id: "apt-1",
     name: "[Apartment 1 name]",

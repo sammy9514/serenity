@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/react-icons": "^2.2.7",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-icons": "^5.7.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
