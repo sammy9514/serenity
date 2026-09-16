@@ -1,3 +1,4 @@
+import { listing } from "../data/listing";
 import Button from "./Button";
 
 const AvailableApt = () => {
@@ -8,20 +9,18 @@ const AvailableApt = () => {
         <p className="text-xs text-ink/70 ">Both sleeps 6 · minimum 2 nights</p>
       </div>
       <div className="grid grid-cols-2 gap-10">
-        {Array.from({ length: 2 }, (_, i) => (
-          <div className=" border border-line  ">
+        {listing.map((ap, i: number) => (
+          <div key={ap.id} className=" border border-line  ">
             <div className="w-full aspect-6/3 bg-ink text-taupe ">
-              Apartment {i}
+              {ap.name}
             </div>
             <div className="p-5">
-              <p className="text-xs">Apartment</p>
+              <p className="text-xs">{ap.name}</p>
               <h3 className="font-display text-3xl my-1.5 ">Apartment</h3>
-              <p className="text-xs">
-                2 bedrooms · 2 bathrooms · private garden · parking.
-              </p>
+              <p className="text-xs">{ap.summary}</p>
               <div className="flex justify-between">
                 <div className="flex gap-2 items-center">
-                  <p className="text-4xl font-display ">£500</p>
+                  <p className="text-4xl font-display ">£{ap.pricePerNight}</p>
                   <span className="text-xs">per night</span>
                 </div>
                 <div className="flex gap-3">
