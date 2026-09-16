@@ -1,3 +1,5 @@
+import Button from "./Button";
+
 const Header = () => {
   return (
     <div className="bg-ink text-cream font-body">
@@ -12,10 +14,7 @@ const Header = () => {
           <a href="#">Location</a>
           <a href="#">Contact</a>
         </nav>
-
-        <button className="py-4 px-8 bg-taupe text-black font-medium ">
-          Book Now
-        </button>
+        <Button variant="onDark">Book Now</Button>
       </div>
     </div>
   );

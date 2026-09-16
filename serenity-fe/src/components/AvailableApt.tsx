@@ -9,7 +9,7 @@ const AvailableApt = () => {
       </div>
       <div className="grid grid-cols-2 gap-10">
         {Array.from({ length: 2 }, (_, i) => (
-          <div className=" border border-gray-400  ">
+          <div className=" border border-line  ">
             <div className="w-full aspect-6/3 bg-ink text-taupe ">
               Apartment {i}
             </div>
@@ -25,8 +25,8 @@ const AvailableApt = () => {
                   <span className="text-xs">per night</span>
                 </div>
                 <div className="flex gap-3">
-                  <Button variant="secondary" children="View" />
-                  <Button variant="primary" children="Book Now" />
+                  <Button variant="secondary">View</Button>
+                  <Button variant="primary">Book Now"</Button>
                 </div>
               </div>
             </div>

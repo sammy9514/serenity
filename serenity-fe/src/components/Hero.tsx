@@ -17,7 +17,7 @@ const Hero = () => {
             parking. Book direct for the best rate.
           </p>
         </div>
-        <Button variant="primary" children="Book Now" />
+        <Button variant="primary">Book Now"</Button>
       </div>
     </section>
   );
