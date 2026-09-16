@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  body {
+    @apply bg-cream text-ink font-body;
+  }
+}
+
 @theme {
   --color-ink: #3a3036;
   --color-taupe: #d9ccc5;
