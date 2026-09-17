@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "seed": "tsx src/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +13,6 @@
   "description": "",
   "type": "module",
   "dependencies": {
-    "@types/mongoose": "^5.11.96",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
