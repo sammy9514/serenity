@@ -40,6 +40,14 @@ const AvailableApt = () => {
             </div>
           </div>
         ))}
+        {isPending && (
+          <p className="text-sm text-ink/70">Loading apartments…</p>
+        )}
+        {isError && (
+          <p className="text-sm text-ink/70">
+            Couldn't load apartments. Please try again shortly.
+          </p>
+        )}
       </div>
     </section>
   );
