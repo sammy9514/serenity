@@ -1,7 +1,7 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 import { connectDb } from "./utils/db";
-import { Listing } from "./model/listings.model";
+import { Listing } from "./models/listings.model";
 
 const listings = [
   {
