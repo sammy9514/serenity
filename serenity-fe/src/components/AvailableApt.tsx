@@ -1,7 +1,16 @@
-import { listings } from "../data/listing";
+import { useQuery } from "@tanstack/react-query";
 import Button from "./Button";
+import { fetchListings } from "../api/listings";
 
 const AvailableApt = () => {
+  const {
+    data: listings,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["listings"],
+    queryFn: fetchListings,
+  });
   return (
     <section className="mt-20  ">
       <div className=" flex flex-col md:flex-row justify-between mb-8 items-center">
@@ -9,8 +18,8 @@ const AvailableApt = () => {
         <p className="text-xs text-ink/70 ">Both sleeps 6 · minimum 2 nights</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {listings.map((apt) => (
-          <div key={apt.id} className=" border border-line  ">
+        {listings?.map((apt) => (
+          <div key={apt._id} className=" border border-line  ">
             <div className="w-full aspect-4/3 md:aspect-6/3 bg-ink text-taupe ">
               {apt.name}
             </div>
