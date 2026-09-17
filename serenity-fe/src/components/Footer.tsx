@@ -7,7 +7,7 @@ const Footer = () => {
             Serenity Space Luxury Homes
           </span>
           <span className="text-xs tracking-widest text-line">
-            London · Email · Phone
+            London · Info@serenityspaceluxuryhomes.com · 077........
           </span>
         </div>
         <nav className="flex gap-5 text-taupe text-xs md:text-sm">
