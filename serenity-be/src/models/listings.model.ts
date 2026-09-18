@@ -9,6 +9,7 @@ const listingsSchema = new Schema(
     sleeps: { type: Number, required: true },
     minNights: { type: Number, required: true, min: 1 },
     instantBook: { type: Boolean, required: true, default: false },
+    cleaningFee: { type: Number, default: 0 },
   },
   { timestamps: true },
 );
