@@ -32,8 +32,13 @@ export const getAvailability = async (req: Request, res: Response) => {
       .status(400)
       .json({ error: { code: "BAD_REQUEST", message: "invalid date range" } });
   }
+  const { slug } = req.params;
+  const listing = await Listing.findOne({ slug });
+  if (!slug)
+    return res
+      .status(400)
+      .json({ error: { code: "BAD_REQUEST", message: "slug is required" } });
 
-  const listing = await Listing.findOne({ slug: req.params });
   if (!listing)
     return res
       .status(404)
