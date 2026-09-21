@@ -1,16 +1,13 @@
-import type {
-  ErrorRequestHandler,
-  NextFunction,
-  Request,
-  Response,
-} from "express";
+import type { ErrorRequestHandler } from "express";
+import { BookingError } from "../services/booking.service";
 
-export const errorHandler: ErrorRequestHandler = (
-  err,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  if (err instanceof BookingError) {
+    const status = err.code === "CONFLICT" ? 409 : 400;
+    return res
+      .status(status)
+      .json({ error: { code: err.code, message: err.message } });
+  }
   console.error(err);
   res
     .status(500)
