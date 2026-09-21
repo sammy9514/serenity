@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { Listing } from "../models/listings.model";
-import { BLOCKING_STATUSES, Booking } from "../models/booking.model";
+import { findConflicts } from "../services/booking.service";
 
 export const getListings = async (req: Request, res: Response) => {
   const listings = await Listing.find().sort({ createdAt: 1 });
@@ -44,12 +44,7 @@ export const getAvailability = async (req: Request, res: Response) => {
       .status(404)
       .json({ error: { code: "NOT_FOUND", message: "listing not found" } });
 
-  const bookings = await Booking.find({
-    listing: listing._id,
-    status: { $in: BLOCKING_STATUSES },
-    checkIn: { $lt: toDate },
-    checkOut: { $gt: fromDate },
-  }).select("checkIn checkOut -_id ");
+  const bookings = await findConflicts(listing._id, fromDate, toDate);
 
   res.json({ data: bookings });
 };

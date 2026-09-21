@@ -1,4 +1,6 @@
+import { BLOCKING_STATUSES, Booking } from "../models/booking.model";
 import { nightsBetween } from "../utils/dates";
+import { Types } from "mongoose";
 
 export class BookingError extends Error {
   constructor(
@@ -48,3 +50,15 @@ export const computeQuote = (
 
   return { nights, pricePerNight, cleaningFee, subtotal, total };
 };
+
+export const findConflicts = (
+  listingId: Types.ObjectId,
+  checkIn: Date,
+  checkOut: Date,
+) =>
+  Booking.find({
+    listing: listingId,
+    status: { $in: BLOCKING_STATUSES },
+    checkIn: { $lt: checkOut },
+    checkOut: { $gt: checkIn },
+  }).select("checkIn checkOut -_id");
