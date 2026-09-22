@@ -55,10 +55,12 @@ export const findConflicts = (
   listingId: Types.ObjectId,
   checkIn: Date,
   checkOut: Date,
+  beforeId?: Types.ObjectId,
 ) =>
   Booking.find({
     listing: listingId,
     status: { $in: BLOCKING_STATUSES },
     checkIn: { $lt: checkOut },
     checkOut: { $gt: checkIn },
+    ...(beforeId ? { _id: { $lt: beforeId } } : {}),
   }).select("checkIn checkOut -_id");
