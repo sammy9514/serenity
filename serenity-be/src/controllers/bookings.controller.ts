@@ -70,7 +70,7 @@ export const createBooking = async (req: Request, res: Response) => {
     return res.status(400).json({
       error: {
         code: "BAD_REQUEST",
-        message: "gues is an object",
+        message: "uests name and email required",
       },
     });
   if (!guest.name || !guest.email)
@@ -94,13 +94,14 @@ export const createBooking = async (req: Request, res: Response) => {
     });
 
   const quote = computeQuote(listing, checkInDate, checkOutDate, guests);
-
+  //checks if selected date is available
   const conflicts = await findConflicts(listing._id, checkInDate, checkOutDate);
 
   if (conflicts.length > 0)
     throw new BookingError("CONFLICT", "those dates are not available");
   const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000);
 
+  //inserts your own your booking and await approval from client
   const booking = await Booking.create({
     listing: listing._id,
     checkIn: checkInDate,
@@ -115,6 +116,7 @@ export const createBooking = async (req: Request, res: Response) => {
     expiresAt,
   });
 
+  //rechecks db again is the date is still available else delete your booking
   const losers = await findConflicts(
     listing._id,
     checkInDate,

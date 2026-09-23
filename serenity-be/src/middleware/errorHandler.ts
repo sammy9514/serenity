@@ -9,7 +9,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
       .json({ error: { code: err.code, message: err.message } });
   }
   console.error(err);
-  res
+  return res
     .status(500)
     .json({ error: { code: "INTERNAL", message: "Something went wrong " } });
 };
