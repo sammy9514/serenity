@@ -1,4 +1,4 @@
-import { BLOCKING_STATUSES, Booking } from "../models/booking.model";
+import { Booking } from "../models/booking.model";
 import { nightsBetween } from "../utils/dates";
 import { Types } from "mongoose";
 
@@ -64,10 +64,13 @@ export const findConflicts = (
     ...(opts.beforeId ? { $lt: opts.beforeId } : {}),
     ...(opts.excludeId ? { $ne: opts.excludeId } : {}),
   };
-
+  const now = new Date();
   return Booking.find({
     listing: listingId,
-    status: { $in: BLOCKING_STATUSES },
+    $or: [
+      { status: "confirmed" },
+      { status: "requested", expiresAt: { $gt: now } },
+    ],
     checkIn: { $lt: checkOut },
     checkOut: { $gt: checkIn },
     ...(Object.keys(idFilter).length ? { _id: idFilter } : {}),

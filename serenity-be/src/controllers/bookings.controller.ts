@@ -9,6 +9,7 @@ import {
 } from "../services/booking.service";
 import { Types } from "mongoose";
 import { Booking } from "../models/booking.model";
+import type { QueryFilter } from "mongoose";
 
 export const quote = async (req: Request, res: Response) => {
   const { listingSlug, checkIn, checkOut, guests } = req.body;
@@ -73,7 +74,7 @@ export const createBooking = async (req: Request, res: Response) => {
     return res.status(400).json({
       error: {
         code: "BAD_REQUEST",
-        message: "uests name and email required",
+        message: "guests name and email required",
       },
     });
   if (!guest.name || !guest.email)
@@ -151,3 +152,33 @@ export const decline = async (req: Request, res: Response) => {
 };
 
 //Types.ObjectId.isValid(id) used because the id it's expecting is Types.ObjectId
+
+export const getBookings = async (req: Request, res: Response) => {
+  const { status, limit } = req.query;
+  if (
+    status !== undefined &&
+    (typeof status !== "string" ||
+      !["requested", "confirmed", "declined", "expired", "cancelled"].includes(
+        status,
+      ))
+  )
+    return res
+      .status(400)
+      .json({ error: { code: "BAD_REQUEST", message: "invalid status" } });
+
+  if (limit !== undefined && Number.isNaN(Number(limit)))
+    return res.status(400).json({
+      error: { code: "BAD_REQUEST", message: "limit must be a number" },
+    });
+
+  const n = Math.min(Number(limit) || 50, 100);
+
+  const filter: QueryFilter<typeof Booking> = {};
+  if (status) filter.status = status;
+
+  const booking = await Booking.find(filter)
+    .sort({ createdAt: -1 })
+    .limit(n)
+    .populate("listing", "name slug");
+  return res.json({ data: booking });
+};
