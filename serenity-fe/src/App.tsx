@@ -9,7 +9,7 @@ const App = () => {
     <div className="w-full min-h-screen">
       <Header />
       <Hero />
-      <div className=" mx-auto max-w-page px-6 ">
+      <div className=" mx-auto max-w-page px-6">
         <AvailableApt />
         <WhyBookDirect />
       </div>

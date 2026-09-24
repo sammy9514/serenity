@@ -1,10 +1,13 @@
 import type { Request, Response } from "express";
 import { Listing } from "../models/listings.model";
 import {
+  approveBooking,
   BookingError,
   computeQuote,
+  declineBooking,
   findConflicts,
 } from "../services/booking.service";
+import { Types } from "mongoose";
 import { Booking } from "../models/booking.model";
 
 export const quote = async (req: Request, res: Response) => {
@@ -117,15 +120,34 @@ export const createBooking = async (req: Request, res: Response) => {
   });
 
   //rechecks db again is the date is still available else delete your booking
-  const losers = await findConflicts(
-    listing._id,
-    checkInDate,
-    checkOutDate,
-    booking._id,
-  );
+  const losers = await findConflicts(listing._id, checkInDate, checkOutDate, {
+    beforeId: booking._id,
+  });
   if (losers.length > 0) {
     await Booking.deleteOne({ _id: booking._id });
     throw new BookingError("CONFLICT", "date already taken");
   }
   return res.status(201).json({ data: booking });
 };
+
+export const approve = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (typeof id !== "string" || !Types.ObjectId.isValid(id))
+    return res
+      .status(400)
+      .json({ error: { code: "BAD_REQUEST", message: "invalid booking id" } });
+  const booking = await approveBooking(id);
+  return res.json({ data: booking });
+};
+
+export const decline = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  if (typeof id !== "string" || !Types.ObjectId.isValid(id))
+    return res
+      .status(400)
+      .json({ error: { code: "BAD_REQUEST", message: "invalid booking id" } });
+  const booking = await declineBooking(id);
+  return res.json({ data: booking });
+};
+
+//Types.ObjectId.isValid(id) used because the id it's expecting is Types.ObjectId

@@ -4,7 +4,7 @@ import { Types } from "mongoose";
 
 export class BookingError extends Error {
   constructor(
-    public code: "BAD_REQUEST" | "CONFLICT",
+    public code: "BAD_REQUEST" | "CONFLICT" | "NOT_FOUND",
     message: string,
   ) {
     super(message);
@@ -55,12 +55,62 @@ export const findConflicts = (
   listingId: Types.ObjectId,
   checkIn: Date,
   checkOut: Date,
-  beforeId?: Types.ObjectId,
-) =>
-  Booking.find({
+  opts: {
+    beforeId?: Types.ObjectId;
+    excludeId?: Types.ObjectId;
+  } = {},
+) => {
+  const idFilter = {
+    ...(opts.beforeId ? { $lt: opts.beforeId } : {}),
+    ...(opts.excludeId ? { $ne: opts.excludeId } : {}),
+  };
+
+  return Booking.find({
     listing: listingId,
     status: { $in: BLOCKING_STATUSES },
     checkIn: { $lt: checkOut },
     checkOut: { $gt: checkIn },
-    ...(beforeId ? { _id: { $lt: beforeId } } : {}),
+    ...(Object.keys(idFilter).length ? { _id: idFilter } : {}),
   }).select("checkIn checkOut -_id");
+};
+
+export const approveBooking = async (bookingId: string) => {
+  const booking = await Booking.findById(bookingId);
+  if (!booking) throw new BookingError("NOT_FOUND", "booking not found");
+  if (booking.status !== "requested")
+    throw new BookingError(
+      "BAD_REQUEST",
+      "only requested bookings can be approved",
+    );
+  const now = new Date();
+  if (booking.expiresAt && booking.expiresAt < now)
+    throw new BookingError("CONFLICT", "request has expired");
+  const conflict = await findConflicts(
+    booking.listing,
+    booking.checkIn,
+    booking.checkOut,
+    { excludeId: booking._id },
+  );
+  if (conflict.length > 0)
+    throw new BookingError("CONFLICT", "date is no available");
+
+  booking.status = "confirmed";
+  booking.expiresAt = null;
+
+  await booking.save();
+  return booking;
+};
+
+export const declineBooking = async (bookingId: string) => {
+  const booking = await Booking.findById(bookingId);
+  if (!booking) throw new BookingError("NOT_FOUND", "booking not found");
+  if (booking?.status !== "requested")
+    throw new BookingError(
+      "BAD_REQUEST",
+      "only requested bookings can be declined",
+    );
+  booking.status = "declined";
+  await booking.save();
+
+  return booking;
+};
