@@ -21,6 +21,8 @@ const bookingSchema = new Schema(
     cleaningFee: { type: Number, default: 0 },
     subtotal: { type: Number, required: true },
     total: { type: Number, required: true },
+    reference: { type: String, required: true, unique: true },
+    accessToken: { type: String, required: true, unique: true, select: false },
     expiresAt: { type: Date },
   },
   {
@@ -29,5 +31,4 @@ const bookingSchema = new Schema(
 );
 
 bookingSchema.index({ listing: 1, checkIn: 1 });
-export const BLOCKING_STATUSES = ["requested", "confirmed"] as const;
 export const Booking = model("Booking", bookingSchema);

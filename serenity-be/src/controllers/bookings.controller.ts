@@ -6,6 +6,8 @@ import {
   computeQuote,
   declineBooking,
   findConflicts,
+  makeAccessToken,
+  makeReference,
 } from "../services/booking.service";
 import { Types } from "mongoose";
 import { Booking } from "../models/booking.model";
@@ -106,19 +108,42 @@ export const createBooking = async (req: Request, res: Response) => {
   const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000);
 
   //inserts your own your booking and await approval from client
-  const booking = await Booking.create({
-    listing: listing._id,
-    checkIn: checkInDate,
-    checkOut: checkOutDate,
-    status: "requested",
-    guest,
-    guests,
-    nights: quote.nights,
-    cleaningFee: quote.cleaningFee,
-    subtotal: quote.subtotal,
-    total: quote.total,
-    expiresAt,
-  });
+
+  let booking;
+  try {
+    booking = await Booking.create({
+      listing: listing._id,
+      checkIn: checkInDate,
+      checkOut: checkOutDate,
+      status: "requested",
+      guest,
+      guests,
+      nights: quote.nights,
+      cleaningFee: quote.cleaningFee,
+      subtotal: quote.subtotal,
+      total: quote.total,
+      expiresAt,
+      reference: makeReference(),
+      accessToken: makeAccessToken(),
+    });
+  } catch (err: any) {
+    if (err?.code !== 11000) throw err;
+    booking = await Booking.create({
+      listing: listing._id,
+      checkIn: checkInDate,
+      checkOut: checkOutDate,
+      status: "requested",
+      guest,
+      guests,
+      nights: quote.nights,
+      cleaningFee: quote.cleaningFee,
+      subtotal: quote.subtotal,
+      total: quote.total,
+      expiresAt,
+      reference: makeReference(),
+      accessToken: makeAccessToken(),
+    });
+  }
 
   //rechecks db again is the date is still available else delete your booking
   const losers = await findConflicts(listing._id, checkInDate, checkOutDate, {
@@ -128,7 +153,16 @@ export const createBooking = async (req: Request, res: Response) => {
     await Booking.deleteOne({ _id: booking._id });
     throw new BookingError("CONFLICT", "date already taken");
   }
-  return res.status(201).json({ data: booking });
+  return res.status(201).json({
+    data: {
+      reference: booking.reference,
+      checkIn: booking.checkIn,
+      checkOut: booking.checkOut,
+      nights: booking.nights,
+      total: booking.total,
+      status: booking.status,
+    },
+  });
 };
 
 export const approve = async (req: Request, res: Response) => {

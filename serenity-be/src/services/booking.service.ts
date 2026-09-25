@@ -1,3 +1,4 @@
+import { randomBytes, randomInt } from "crypto";
 import { Booking } from "../models/booking.model";
 import { nightsBetween } from "../utils/dates";
 import { Types } from "mongoose";
@@ -117,3 +118,12 @@ export const declineBooking = async (bookingId: string) => {
 
   return booking;
 };
+
+const alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ23456789";
+
+export const makeReference = () =>
+  "SS-" +
+  Array.from({ length: 6 }, () => alphabet[randomInt(alphabet.length)]).join(
+    "",
+  );
+export const makeAccessToken = () => randomBytes(32).toString("hex");
