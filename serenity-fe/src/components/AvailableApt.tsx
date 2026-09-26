@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Button from "./Button";
 import { fetchListings } from "../api/listings";
+import { Link } from "react-router";
 
 const AvailableApt = () => {
   const {
@@ -33,7 +34,9 @@ const AvailableApt = () => {
                   <span className="text-xs">per night</span>
                 </div>
                 <div className="flex gap-3">
-                  <Button variant="secondary">View</Button>
+                  <Button variant="secondary">
+                    <Link to={`/apartments/${apt.slug}`}>View</Link>
+                  </Button>
                   <Button variant="primary">Book Now</Button>
                 </div>
               </div>

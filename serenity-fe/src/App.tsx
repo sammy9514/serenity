@@ -1,18 +1,18 @@
-import AvailableApt from "./components/AvailableApt";
-import Footer from "./components/Footer";
+import { Route, Routes } from "react-router";
+
+import Apartment from "./pages/Apartment";
 import Header from "./components/Header";
-import Hero from "./components/Hero";
-import WhyBookDirect from "./components/WhyBookDirect";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
-    <div className="w-full min-h-screen">
+    <div>
       <Header />
-      <Hero />
-      <div className=" mx-auto max-w-page px-6">
-        <AvailableApt />
-        <WhyBookDirect />
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/apartments/:slug" element={<Apartment />} />
+      </Routes>
       <Footer />
     </div>
   );
