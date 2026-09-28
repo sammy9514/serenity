@@ -15,3 +15,49 @@
   --font-body: "Open Sans", system-ui, sans-serif;
   --container-page: 1750px;
 }
+
+.rdp-root {
+  --rdp-accent-color: var(--color-ink);
+  --rdp-accent-background-color: var(--color-taupe);
+  --rdp-day-height: 52px;
+  --rdp-day-width: 52px;
+  --rdp-day_button-height: 52px;
+  --rdp-day_button-width: 52px;
+  --rdp-day_button-border-radius: 0;
+  --rdp-selected-border: none;
+  --rdp-font-family: var(--font-body);
+  width: 100%;
+}
+
+.rdp-months {
+  display: flex;
+  width: 100%;
+  gap: 4rem;
+}
+
+.rdp-month {
+  flex: 1 1 0;
+}
+
+.rdp-month_grid {
+  width: 100%;
+}
+
+.rdp-month_caption {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+}
+
+.rdp-weekday {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-ink) 60%, transparent);
+}
+
+.rdp-disabled {
+  color: var(--color-line);
+  text-decoration: line-through;
+}

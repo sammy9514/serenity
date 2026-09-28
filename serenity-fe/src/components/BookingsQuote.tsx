@@ -7,12 +7,23 @@ import { createBooking, getQuote } from "../api/booking";
 
 type Props = {
   listing: Listing;
+  checkIn: string;
+  setCheckIn: (c: string) => void;
+  setCheckOut: (c: string) => void;
+  setGuests: (c: number) => void;
+  checkOut: string;
+  guests: number;
 };
 
-const BookingsQuote = ({ listing }: Props) => {
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(1);
+const BookingsQuote = ({
+  listing,
+  checkIn,
+  checkOut,
+  guests,
+  setCheckIn,
+  setCheckOut,
+  setGuests,
+}: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
@@ -35,7 +46,6 @@ const BookingsQuote = ({ listing }: Props) => {
     error: submitError,
   } = useMutation({
     mutationFn: createBooking,
-    // onSuccess,
   });
 
   const onSubmit = (e: React.FormEvent) => {
@@ -51,7 +61,7 @@ const BookingsQuote = ({ listing }: Props) => {
 
   if (data) {
     return (
-      <div className="sticky top-6 mt-10 flex flex-col gap-3 border border-line bg-cream p-7">
+      <div className="sticky top-6 mt-10 flex flex-col gap-3 self-start border border-line bg-cream p-5">
         <h3 className="font-display text-2xl">Request sent</h3>
         <p className="text-sm">
           Reference <strong>{data.reference}</strong>
@@ -67,7 +77,7 @@ const BookingsQuote = ({ listing }: Props) => {
   }
 
   return (
-    <div className="sticky top-6 mt-10 flex flex-col gap-3 border border-line bg-cream p-5 text-sm">
+    <div className="sticky top-6 mt-10 flex flex-col gap-3 self-start border border-line bg-cream p-5 text-sm">
       <div className="flex items-baseline gap-2">
         <span className="font-display text-3xl leading-none">
           £{listing.pricePerNight}
@@ -107,11 +117,13 @@ const BookingsQuote = ({ listing }: Props) => {
             onChange={(e) => setGuests(Number(e.target.value))}
             className="bg-transparent text-sm outline-none"
           >
-            {Array.from({ length: listing.sleeps }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={n}>
-                {n} {n === 1 ? "guest" : "guests"}
-              </option>
-            ))}
+            {Array.from({ length: listing.sleeps }, (_, i) => i + 1).map(
+              (n) => (
+                <option key={n} value={n}>
+                  {n} {n === 1 ? "guest" : "guests"}
+                </option>
+              ),
+            )}
           </select>
         </label>
       </div>
@@ -126,15 +138,15 @@ const BookingsQuote = ({ listing }: Props) => {
               <span>
                 £{listing.pricePerNight} × {quote.nights} nights
               </span>
-              <span>£{quote.subtotal}</span>
+              <span>£{quote.subtotal.toLocaleString()}</span>
             </div>
             <div className="flex justify-between">
               <span>Cleaning fee</span>
-              <span>£{quote.cleaningFee}</span>
+              <span>£{quote.cleaningFee.toLocaleString()}</span>
             </div>
             <div className="flex justify-between border-t border-line pt-2 font-bold">
               <span>Total</span>
-              <span>£{quote.total}</span>
+              <span>£{quote.total.toLocaleString()}</span>
             </div>
           </div>
 

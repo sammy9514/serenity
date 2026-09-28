@@ -20,7 +20,6 @@ const WhereYouSleep = () => {
           </div>
         ))}
       </div>
-      <div className="my-10 border-t border-line " />
     </div>
   );
 };

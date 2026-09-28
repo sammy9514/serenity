@@ -22,3 +22,8 @@ export type Booking = {
   total: number;
   status: string;
 };
+
+export type BookedRange = {
+  checkIn: string;
+  checkOut: string;
+};
