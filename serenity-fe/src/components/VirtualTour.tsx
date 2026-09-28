@@ -5,7 +5,7 @@ const VirtualTour = () => {
     <section className="mt-12 border-t border-line pt-12">
       <div className="flex items-end justify-between">
         <h2 className="font-display text-3xl">Virtual tour</h2>
-        <p className="text-sm text-ink/70">
+        <p className="text-sm text-ink/70 hidden md:block">
           Walk through every room before you book
         </p>
       </div>

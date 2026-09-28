@@ -12,6 +12,7 @@ export interface Listing {
   cleaningFee: number;
   minNights: number;
   instantBook: boolean;
+  photos: { url: string; caption: string; room: string }[];
 }
 
 export type Booking = {

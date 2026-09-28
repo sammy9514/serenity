@@ -10,6 +10,7 @@ import AvailabilityCalendar from "../components/AvailabilityCalendar";
 import { useState } from "react";
 import WhereYouBe from "../components/WhereYouBe";
 import ThingsToKnow from "../components/ThingsToKnow";
+import Amenities from "../components/Amenities";
 
 const Apartment = () => {
   const { slug } = useParams();
@@ -29,9 +30,9 @@ const Apartment = () => {
   if (isPending) return <p>Loading…</p>;
   if (isError) return <p>Couldn't load this apartment.</p>;
   return (
-    <div className="max-w-page mx-auto px-6 ">
+    <div className="max-w-page mx-auto px-4 sm:px-6">
       <ApartmentView listing={listing} />
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] gap-20 ">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] gap-10 lg:gap-20">
         <div className="">
           <AboutApartment listing={listing} />
           <WhereYouSleep />
@@ -45,6 +46,7 @@ const Apartment = () => {
               setCheckOut(to);
             }}
           />
+          <Amenities />
           <WhereYouBe />
           <ThingsToKnow />
         </div>

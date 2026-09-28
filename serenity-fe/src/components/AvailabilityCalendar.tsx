@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { addMonths, format, subDays } from "date-fns";
 import type { Listing } from "../types";
@@ -17,6 +18,16 @@ const AvailabilityCalendar = ({
   checkOut,
   onSelect,
 }: Props) => {
+  const [months, setMonths] = useState(
+    typeof window !== "undefined" && window.innerWidth < 768 ? 1 : 2,
+  );
+
+  useEffect(() => {
+    const onResize = () => setMonths(window.innerWidth < 768 ? 1 : 2);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   const from = format(new Date(), "yyyy-MM-dd");
   const to = format(addMonths(new Date(), 6), "yyyy-MM-dd");
 
@@ -33,12 +44,14 @@ const AvailabilityCalendar = ({
       <section className="border-t border-line pt-12 mt-12">
         <div className="flex items-end justify-between mb-6">
           <h2 className="font-display text-3xl">Availability</h2>
-          <p className="text-sm text-ink/70">Crossed-out dates are booked</p>
+          <p className="text-sm text-ink/70 hidden md:block">
+            Crossed-out dates are booked
+          </p>
         </div>
-        <div className="border border-line bg-cream p-10">
+        <div className="border border-line bg-cream p-4 sm:p-10 overflow-x-auto">
           <DayPicker
             mode="range"
-            numberOfMonths={2}
+            numberOfMonths={months}
             disabled={[...disabled, { before: new Date() }]}
             selected={{
               from: checkIn ? new Date(checkIn) : undefined,

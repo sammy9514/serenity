@@ -19,20 +19,33 @@
 .rdp-root {
   --rdp-accent-color: var(--color-ink);
   --rdp-accent-background-color: var(--color-taupe);
-  --rdp-day-height: 52px;
-  --rdp-day-width: 52px;
-  --rdp-day_button-height: 52px;
-  --rdp-day_button-width: 52px;
-  --rdp-day_button-border-radius: 0;
+  --rdp-day-height: 44px;
+  --rdp-day-width: 44px;
+  --rdp-day_button-height: 40px;
+  --rdp-day_button-width: 40px;
+  --rdp-day_button-border-radius: 2px;
+  --rdp-day_button-border: none;
   --rdp-selected-border: none;
+  --rdp-range_start-color: var(--color-cream);
+  --rdp-range_end-color: var(--color-cream);
+  --rdp-range_start-background: var(--color-ink);
+  --rdp-range_end-background: var(--color-ink);
+  --rdp-range_middle-background-color: color-mix(
+    in oklab,
+    var(--color-taupe) 55%,
+    white
+  );
+  --rdp-range_middle-color: var(--color-ink);
+  --rdp-today-color: var(--color-ink);
   --rdp-font-family: var(--font-body);
   width: 100%;
 }
 
 .rdp-months {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
-  gap: 4rem;
+  gap: 2rem;
 }
 
 .rdp-month {
@@ -41,23 +54,59 @@
 
 .rdp-month_grid {
   width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px;
 }
 
 .rdp-month_caption {
-  font-family: var(--font-body);
-  font-size: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
   justify-content: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .rdp-weekday {
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in oklab, var(--color-ink) 60%, transparent);
+  color: color-mix(in oklab, var(--color-ink) 55%, transparent);
+  padding-bottom: 0.5rem;
+}
+
+.rdp-day_button {
+  font-size: 0.8125rem;
+}
+
+.rdp-selected .rdp-day_button {
+  font-weight: 700;
 }
 
 .rdp-disabled {
   color: var(--color-line);
   text-decoration: line-through;
+}
+
+.rdp-outside {
+  visibility: hidden;
+}
+
+.rdp-nav button {
+  border: 1px solid var(--color-line);
+  border-radius: 0;
+}
+
+@media (min-width: 768px) {
+  .rdp-months {
+    flex-wrap: nowrap;
+    gap: 3rem;
+  }
+
+  .rdp-root {
+    --rdp-day-height: 48px;
+    --rdp-day-width: 48px;
+    --rdp-day_button-height: 44px;
+    --rdp-day_button-width: 44px;
+  }
 }
