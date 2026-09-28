@@ -8,7 +8,17 @@ export interface Listing {
   beds: number;
   bathrooms: number;
   bedrooms: number;
-  description: [string];
+  description: string[];
+  cleaningFee: number;
   minNights: number;
   instantBook: boolean;
 }
+
+export type Booking = {
+  reference: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  total: number;
+  status: string;
+};

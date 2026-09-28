@@ -21,12 +21,12 @@ const Apartment = () => {
   return (
     <div className="max-w-page mx-auto px-6 ">
       <ApartmentView listing={listing} />
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_600px] gap-20  ">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] gap-20 ">
         <div className="">
           <AboutApartment listing={listing} />
           <WhereYouSleep />
         </div>
-        <BookingsQuote />
+        <BookingsQuote listing={listing} />
       </div>
     </div>
   );
