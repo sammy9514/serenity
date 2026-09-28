@@ -7,12 +7,12 @@ type Props = {
 
 const variants: Record<Variant, string> = {
   primary: "bg-ink text-cream",
-  secondary: "border border-ink text-ink",
+  secondary: "border border-ink text-ink flex gap-3 items-center",
   onDark: "bg-taupe text-ink",
 };
 const Button = ({ variant = "primary", children }: Props) => {
   return (
-    <button className={`py-4 px-8 font-medium ${variants[variant]} `}>
+    <button className={`py-4 px-8 font-medium ${variants[variant]}`}>
       {children}
     </button>
   );

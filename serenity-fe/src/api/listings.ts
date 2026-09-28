@@ -8,7 +8,7 @@ export const fetchListings = async (): Promise<Listing[]> => {
   return json.data;
 };
 
-export const fetchListing = async (slug: string) => {
+export const fetchListing = async (slug: string): Promise<Listing> => {
   const res = await fetch(`${API_URL}/api/v1/listings/${slug}`);
   if (!res.ok) throw new Error("failed to load data");
   const json = await res.json();
