@@ -10,9 +10,9 @@ type Props = {
   listing: Listing;
 };
 
-const photos = ["Master bedroom", "Kitchen", "Ensuite", "Garden"];
-
 const ApartmentView = ({ listing }: Props) => {
+  const hero = listing.photos[0];
+  const thumbnails = listing.photos.slice(1, 5);
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const onScroll = () => {
@@ -27,14 +27,14 @@ const ApartmentView = ({ listing }: Props) => {
         <div
           ref={trackRef}
           onScroll={onScroll}
-          className="flex aspect-4/3 items-end bg-taupe snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] "
+          className="flex aspect-4/3 snap-x snap-mandatory overflow-x-auto [scrollbar-width:none]"
         >
-          {photos.map((label) => (
+          {listing.photos.map((photo) => (
             <div
-              key={label}
-              className="flex w-full shrink-0 snap-center bg-taupe p-3"
+              key={photo.caption}
+              className="flex w-full shrink-0 snap-center items-end bg-taupe p-3 text-xs uppercase tracking-widest text-ink/60"
             >
-              {label}
+              {photo.caption}
             </div>
           ))}
         </div>
@@ -55,7 +55,7 @@ const ApartmentView = ({ listing }: Props) => {
         </button>
 
         <span className="absolute bottom-4 right-4 bg-ink px-3 py-2 text-xs font-bold text-cream">
-          {index + 1} / {photos.length}
+          {index + 1} / {listing.photos.length}
         </span>
       </div>
 
@@ -86,22 +86,22 @@ const ApartmentView = ({ listing }: Props) => {
       {/* desktop: the four-photo grid */}
       <div className="order-3 hidden gap-4 md:grid md:grid-cols-4">
         <div className="flex aspect-4/3 items-end bg-taupe p-3 text-xs uppercase tracking-widest text-ink/60 md:col-span-2 md:row-span-2">
-          Living room
+          {hero?.caption}
         </div>
         <div className="relative grid grid-cols-2 gap-4 md:col-span-2 md:row-span-2 md:aspect-4/3">
-          {photos.map((label) => (
+          {thumbnails.map((photo) => (
             <div
-              key={label}
+              key={photo.caption}
               className="flex aspect-4/3 items-end bg-taupe p-3 text-xs uppercase tracking-widest text-ink/60"
             >
-              {label}
+              {photo.caption}
             </div>
           ))}
           <Link
             to={`/apartments/${listing.slug}/gallery`}
             className="absolute bottom-3 right-3 border border-line bg-cream px-4 py-2 text-sm"
           >
-            Show all {photos.length} photos
+            Show all {listing.photos.length} photos
           </Link>
         </div>
       </div>

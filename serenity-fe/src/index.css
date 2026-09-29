@@ -97,7 +97,7 @@
   border-radius: 0;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .rdp-months {
     flex-wrap: nowrap;
     gap: 3rem;

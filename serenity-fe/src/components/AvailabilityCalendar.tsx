@@ -19,11 +19,11 @@ const AvailabilityCalendar = ({
   onSelect,
 }: Props) => {
   const [months, setMonths] = useState(
-    typeof window !== "undefined" && window.innerWidth < 768 ? 1 : 2,
+    typeof window !== "undefined" && window.innerWidth < 1024 ? 1 : 2,
   );
 
   useEffect(() => {
-    const onResize = () => setMonths(window.innerWidth < 768 ? 1 : 2);
+    const onResize = () => setMonths(window.innerWidth < 1024 ? 1 : 2);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
