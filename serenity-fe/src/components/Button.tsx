@@ -5,6 +5,7 @@ type Props = {
   children: React.ReactNode;
   type?: "button" | "submit";
   disabled?: boolean;
+  onClick?: () => void;
 };
 
 const variants: Record<Variant, string> = {
@@ -17,12 +18,14 @@ const Button = ({
   children,
   type = "button",
   disabled = false,
+  onClick,
 }: Props) => {
   return (
     <button
       type={type}
       disabled={disabled}
       className={`py-4 px-8 font-medium ${variants[variant]}`}
+      onClick={onClick}
     >
       {children}
     </button>

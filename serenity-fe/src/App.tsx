@@ -1,22 +1,24 @@
 import { Route, Routes } from "react-router";
 
-import Apartment from "./pages/Apartment";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import PublicLayout from "./layouts/PublicLayout";
 import Home from "./pages/Home";
+import Apartment from "./pages/Apartment";
 import Gallery from "./pages/Gallery";
+import AdminLogin from "./pages/AdminLogin";
+import AdminBooking from "./pages/AdminBooking";
 
 const App = () => {
   return (
-    <div>
-      <Header />
-      <Routes>
+    <Routes>
+      <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/apartments/:slug" element={<Apartment />} />
-        <Route path="/apartments/:slug/gallery" element={<Gallery />} />
-      </Routes>
-      <Footer />
-    </div>
+      </Route>
+      <Route path="/apartments/:slug/gallery" element={<Gallery />} />
+
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={<AdminBooking />} />
+    </Routes>
   );
 };
 

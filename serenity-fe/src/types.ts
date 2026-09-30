@@ -28,3 +28,28 @@ export type BookedRange = {
   checkIn: string;
   checkOut: string;
 };
+
+export type BookingStatus =
+  | "requested"
+  | "confirmed"
+  | "declined"
+  | "expired"
+  | "cancelled";
+
+export type AdminBooking = {
+  _id: string;
+  reference: string;
+  listing: { _id: string; name: string; slug: string };
+  guest: { name: string; email: string };
+  guests: number;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  cleaningFee: number;
+  subtotal: number;
+  total: number;
+  status: BookingStatus;
+  expiresAt?: string;
+  createdAt: string;
+  updatedAt: string;
+};
