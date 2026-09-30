@@ -15,6 +15,7 @@ const listingsSchema = new Schema(
     instantBook: { type: Boolean, required: true, default: false },
     cleaningFee: { type: Number, default: 0 },
     photos: [{ url: String, caption: String, room: String }],
+    amenities: [{ label: String, category: String }],
   },
   { timestamps: true },
 );

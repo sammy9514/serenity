@@ -173,6 +173,7 @@ export const createBooking = async (req: Request, res: Response) => {
       nights: booking.nights,
       total: booking.total,
       status: booking.status,
+      accessToken: booking.accessToken,
       clientSecret: intent.client_secret,
     },
   });
@@ -228,4 +229,33 @@ export const getBookings = async (req: Request, res: Response) => {
     .limit(n)
     .populate("listing", "name slug");
   return res.json({ data: booking });
+};
+
+export const getByReference = async (req: Request, res: Response) => {
+  const { reference } = req.params;
+  const { token } = req.query;
+
+  if (!reference || typeof token !== "string")
+    throw new BookingError("BAD_REQUEST", "reference and token is required");
+  const booking = await Booking.findOne({ reference })
+    .select("+accessToken")
+    .populate("listing", "name slug");
+  if (!booking || booking.accessToken !== token)
+    return res
+      .status(404)
+      .json({ error: { code: "NOT_FOUND", message: "booking not found" } });
+  return res.json({
+    data: {
+      reference: booking.reference,
+      status: booking.status,
+      checkIn: booking.checkIn,
+      checkOut: booking.checkOut,
+      nights: booking.nights,
+      guests: booking.guests,
+      total: booking.total,
+      listing: booking.listing,
+      expiresAt: booking.expiresAt,
+      accesstoken: token,
+    },
+  });
 };
