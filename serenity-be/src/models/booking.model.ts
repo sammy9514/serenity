@@ -23,6 +23,12 @@ const bookingSchema = new Schema(
     total: { type: Number, required: true },
     reference: { type: String, required: true, unique: true },
     accessToken: { type: String, required: true, unique: true, select: false },
+    paymentIntentId: { type: String },
+    paymentStatus: {
+      type: String,
+      enum: ["none", "pending", "authorised", "captured", "released"],
+      default: "none",
+    },
     expiresAt: { type: Date },
   },
   {

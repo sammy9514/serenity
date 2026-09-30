@@ -2,6 +2,7 @@ import { randomBytes, randomInt } from "crypto";
 import { Booking } from "../models/booking.model";
 import { nightsBetween } from "../utils/dates";
 import { Types } from "mongoose";
+import { stripe } from "../utils/stripe";
 
 export class BookingError extends Error {
   constructor(
@@ -96,7 +97,11 @@ export const approveBooking = async (bookingId: string) => {
     { excludeId: booking._id },
   );
   if (conflict.length > 0)
-    throw new BookingError("CONFLICT", "date is no available");
+    throw new BookingError("CONFLICT", "date is no longer available");
+  if (booking.paymentIntentId) {
+    await stripe.paymentIntents.capture(booking.paymentIntentId);
+    booking.paymentStatus = "captured";
+  }
 
   booking.status = "confirmed";
   booking.expiresAt = null;
@@ -108,18 +113,23 @@ export const approveBooking = async (bookingId: string) => {
 export const declineBooking = async (bookingId: string) => {
   const booking = await Booking.findById(bookingId);
   if (!booking) throw new BookingError("NOT_FOUND", "booking not found");
-  if (booking?.status !== "requested")
+  if (booking.status !== "requested")
     throw new BookingError(
       "BAD_REQUEST",
       "only requested bookings can be declined",
     );
+
+  if (booking.paymentIntentId) {
+    await stripe.paymentIntents.cancel(booking.paymentIntentId);
+    booking.paymentStatus = "released";
+  }
   booking.status = "declined";
   await booking.save();
 
   return booking;
 };
 
-const alphabet = "ABCDEFGHJKLMNOPQRSTUVWXYZ23456789";
+const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 export const makeReference = () =>
   "SS-" +

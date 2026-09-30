@@ -12,6 +12,7 @@ import {
 import { Types } from "mongoose";
 import { Booking } from "../models/booking.model";
 import type { QueryFilter } from "mongoose";
+import { stripe } from "../utils/stripe";
 
 export const quote = async (req: Request, res: Response) => {
   const { listingSlug, checkIn, checkOut, guests } = req.body;
@@ -153,6 +154,17 @@ export const createBooking = async (req: Request, res: Response) => {
     await Booking.deleteOne({ _id: booking._id });
     throw new BookingError("CONFLICT", "date already taken");
   }
+
+  const intent = await stripe.paymentIntents.create({
+    amount: quote.total * 100,
+    currency: "gbp",
+    capture_method: "manual",
+    metadata: { bookingId: String(booking._id), reference: booking.reference },
+  });
+
+  booking.paymentIntentId = intent.id;
+  booking.paymentStatus = "pending";
+  await booking.save();
   return res.status(201).json({
     data: {
       reference: booking.reference,
@@ -161,6 +173,7 @@ export const createBooking = async (req: Request, res: Response) => {
       nights: booking.nights,
       total: booking.total,
       status: booking.status,
+      clientSecret: intent.client_secret,
     },
   });
 };
