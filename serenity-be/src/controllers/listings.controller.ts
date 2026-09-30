@@ -9,6 +9,22 @@ export const getListings = async (req: Request, res: Response) => {
   });
 };
 
+export const getListing = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+  if (typeof slug !== "string")
+    return res
+      .status(400)
+      .json({ error: { code: "BAD_REQUEST", message: "slug must be string" } });
+  const listings = await Listing.findOne({ slug });
+  if (!listings)
+    return res
+      .status(404)
+      .json({ error: { code: "NOT_FOUND", message: "listing not found" } });
+  return res.json({
+    data: listings,
+  });
+};
+
 export const getAvailability = async (req: Request, res: Response) => {
   const { from, to } = req.query;
   if (typeof from !== "string" || typeof to !== "string") {
