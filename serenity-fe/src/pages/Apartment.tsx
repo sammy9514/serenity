@@ -47,7 +47,7 @@ const Apartment = () => {
               setCheckOut(to);
             }}
           />
-          <Amenities />
+          <Amenities listing={listing} />
           <WhereYouBe />
           <ThingsToKnow />
         </div>

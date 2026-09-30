@@ -1,41 +1,40 @@
-import {
-  LuWifi,
-  LuTv,
-  LuUtensils,
-  LuCar,
-  LuTrees,
-  LuWashingMachine,
-  LuBath,
-  LuLock,
-} from "react-icons/lu";
+import { Link } from "react-router";
 import Button from "./Button";
+import type { Listing } from "../types";
+import { amenityIcon } from "../lib/amenityIcons";
 
-const amenities = [
-  { icon: <LuWifi />, label: "Fast wifi" },
-  { icon: <LuTv />, label: "Smart TV" },
-  { icon: <LuUtensils />, label: "Full kitchen" },
-  { icon: <LuCar />, label: "Free parking on site" },
-  { icon: <LuTrees />, label: "Private garden" },
-  { icon: <LuWashingMachine />, label: "Washer and dryer" },
-  { icon: <LuBath />, label: "Bathtub in ensuite" },
-  { icon: <LuLock />, label: "Self check-in lockbox" },
-];
+type Props = {
+  listing: Listing;
+};
 
-const Amenities = () => {
+const Amenities = ({ listing }: Props) => {
+  const preview = listing.amenities.slice(0, 8);
+
   return (
     <section className="mt-12 border-t border-line pt-12">
       <h2 className="font-display text-3xl">What this place offers</h2>
+
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {amenities.map((amenity) => (
-          <div key={amenity.label} className="flex items-center gap-3">
-            <span className="text-lg">{amenity.icon}</span>
-            <span>{amenity.label}</span>
+        {preview.map((amenity) => (
+          <div key={amenity.label} className="flex items-center gap-3 text-sm">
+            <span className="text-lg text-ink/70">
+              {amenityIcon(amenity.label)}
+            </span>
+            {amenity.label}
           </div>
         ))}
       </div>
-      <div className="mt-8 inline-grid">
-        <Button variant="secondary">Show all 18 amenities</Button>
-      </div>
+
+      {listing.amenities.length > preview.length && (
+        <Link
+          to={`/apartments/${listing.slug}/amenities`}
+          className="mt-8 inline-grid"
+        >
+          <Button variant="secondary">
+            Show all {listing.amenities.length} amenities
+          </Button>
+        </Link>
+      )}
     </section>
   );
 };

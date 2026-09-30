@@ -13,6 +13,7 @@ export interface Listing {
   minNights: number;
   instantBook: boolean;
   photos: { url: string; caption: string; room: string }[];
+  amenities: { label: string; category: string }[];
 }
 
 export type Booking = {
@@ -23,6 +24,18 @@ export type Booking = {
   total: number;
   status: string;
   clientSecret: string;
+  accessToken: string;
+};
+export type BookingStatues = {
+  reference: string;
+  status: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  guests: string;
+  total: number;
+  listing: { _id: string; name: string; slug: string };
+  expiresAt: string;
 };
 
 export type BookedRange = {
@@ -53,4 +66,16 @@ export type AdminBooking = {
   expiresAt?: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type BookingSummary = {
+  reference: string;
+  status: BookingStatus;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  guests: number;
+  total: number;
+  listing: { name: string; slug: string };
+  expiresAt?: string;
 };

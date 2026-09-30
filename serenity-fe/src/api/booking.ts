@@ -1,4 +1,4 @@
-import type { Booking } from "../types";
+import type { Booking, BookingSummary } from "../types";
 
 type Quote = {
   nights: number;
@@ -40,5 +40,19 @@ export const createBooking = async (input: {
   });
   const json = await res.json();
   if (!res.ok) throw new Error(json.error.message ?? "couldn't create booking");
+  return json.data;
+};
+
+export const fetchBookingByReference = async (
+  reference: string,
+  token: string,
+): Promise<BookingSummary> => {
+  const res = await fetch(
+    `${API_URL}/api/v1/bookings/${reference}?token=${encodeURIComponent(token)}`,
+  );
+  const json = await res.json();
+
+  if (!res.ok)
+    throw new Error(json?.error?.message ?? "Could not find that booking");
   return json.data;
 };

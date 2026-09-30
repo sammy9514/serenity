@@ -5,6 +5,7 @@ import { LuLock } from "react-icons/lu";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createBooking, getQuote } from "../api/booking";
 import PaymentSteps from "./PaymentForm";
+import { useNavigate } from "react-router";
 
 type Props = {
   listing: Listing;
@@ -27,7 +28,6 @@ const BookingsQuote = ({
 }: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [paid, setPaid] = useState(false);
 
   const {
     data: quote,
@@ -61,32 +61,42 @@ const BookingsQuote = ({
     });
   };
 
-  if (data && !paid)
-    return (
-      <PaymentSteps
-        clientSecret={data.clientSecret}
-        reference={data.reference}
-        total={data.total}
-        onPaid={() => setPaid(true)}
-      />
-    );
+  const navigate = useNavigate();
 
-  if (data && paid) {
+  if (data)
     return (
-      <div className="sticky top-6 mt-10 flex flex-col gap-3 self-start border border-line bg-cream p-5">
-        <h3 className="font-display text-2xl">Request sent</h3>
-        <p className="text-sm">
-          Reference <strong>{data.reference}</strong>
-        </p>
-        <p className="text-sm">
-          {data.nights} nights · £{data.total}
-        </p>
+      <div className="sticky top-6 mt-10 flex flex-col gap-4 self-start border border-line bg-cream p-5">
+        <h3 className="font-display text-xl">Confirm and pay</h3>
         <p className="text-sm text-ink/70">
-          We'll email you within 48 hours to confirm.
+          {data.reference} · £{data.total}
         </p>
+        <PaymentSteps
+          clientSecret={data.clientSecret}
+          reference={data.reference}
+          total={data.total}
+          onPaid={() =>
+            navigate(`/bookings/${data.reference}?token=${data.accessToken}`)
+          }
+        />
       </div>
     );
-  }
+
+  // if (data && paid) {
+  //   return (
+  //     <div className="sticky top-6 mt-10 flex flex-col gap-3 self-start border border-line bg-cream p-5">
+  //       <h3 className="font-display text-2xl">Request sent</h3>
+  //       <p className="text-sm">
+  //         Reference <strong>{data.reference}</strong>
+  //       </p>
+  //       <p className="text-sm">
+  //         {data.nights} nights · £{data.total}
+  //       </p>
+  //       <p className="text-sm text-ink/70">
+  //         We'll email you within 48 hours to confirm.
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="sticky top-6 mt-10 flex flex-col gap-3 self-start border border-line bg-cream p-5 text-sm">
