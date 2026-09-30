@@ -4,6 +4,7 @@ import Button from "./Button";
 import { LuLock } from "react-icons/lu";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createBooking, getQuote } from "../api/booking";
+import PaymentSteps from "./PaymentForm";
 
 type Props = {
   listing: Listing;
@@ -26,6 +27,7 @@ const BookingsQuote = ({
 }: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [paid, setPaid] = useState(false);
 
   const {
     data: quote,
@@ -59,7 +61,17 @@ const BookingsQuote = ({
     });
   };
 
-  if (data) {
+  if (data && !paid)
+    return (
+      <PaymentSteps
+        clientSecret={data.clientSecret}
+        reference={data.reference}
+        total={data.total}
+        onPaid={() => setPaid(true)}
+      />
+    );
+
+  if (data && paid) {
     return (
       <div className="sticky top-6 mt-10 flex flex-col gap-3 self-start border border-line bg-cream p-5">
         <h3 className="font-display text-2xl">Request sent</h3>

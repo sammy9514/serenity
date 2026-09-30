@@ -22,6 +22,7 @@ export type Booking = {
   nights: number;
   total: number;
   status: string;
+  clientSecret: string;
 };
 
 export type BookedRange = {

@@ -1,8 +1,8 @@
 const WhereYouSleep = () => {
   const sleepInfo = [
     { roomType: "Mater Bedroom", roomInfo: "1 king bed · ensuite · sleeps 2" },
-    { roomType: "Mater Bedroom", roomInfo: "1 king bed · ensuite · sleeps 2" },
-    { roomType: "Mater Bedroom", roomInfo: "1 king bed · ensuite · sleeps 2" },
+    { roomType: "Mater Bedroom", roomInfo: "1  bed · ensuite · sleeps 2" },
+    { roomType: "Mater Bedroom", roomInfo: "1 king  · ensuite · sleeps 2" },
   ];
 
   return (
