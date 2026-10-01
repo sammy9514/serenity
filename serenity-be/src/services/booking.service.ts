@@ -3,6 +3,7 @@ import { Booking } from "../models/booking.model";
 import { nightsBetween } from "../utils/dates";
 import { Types } from "mongoose";
 import { stripe } from "../utils/stripe";
+import { sendApproved, sendDeclined } from "./email.service";
 
 export class BookingError extends Error {
   constructor(
@@ -79,6 +80,31 @@ export const findConflicts = (
   }).select("checkIn checkOut -_id");
 };
 
+const notifyGuest = async (
+  bookingId: Types.ObjectId,
+  outcome: "approved" | "declined",
+) => {
+  const full = await Booking.findById(bookingId)
+    .select("+accessToken")
+    .populate<{ listing: { name: string } }>("listing", "name");
+
+  if (!full?.guest) return;
+
+  const payload = {
+    reference: full.reference,
+    accessToken: full.accessToken,
+    guest: { name: full.guest.name, email: full.guest.email },
+    checkIn: full.checkIn,
+    checkOut: full.checkOut,
+    nights: full.nights,
+    total: full.total,
+    listingName: full.listing.name,
+  };
+
+  if (outcome === "approved") await sendApproved(payload);
+  else await sendDeclined(payload);
+};
+
 export const approveBooking = async (bookingId: string) => {
   const booking = await Booking.findById(bookingId);
   if (!booking) throw new BookingError("NOT_FOUND", "booking not found");
@@ -107,6 +133,7 @@ export const approveBooking = async (bookingId: string) => {
   booking.expiresAt = null;
 
   await booking.save();
+  void notifyGuest(booking._id, "approved");
   return booking;
 };
 
@@ -125,6 +152,7 @@ export const declineBooking = async (bookingId: string) => {
   }
   booking.status = "declined";
   await booking.save();
+  void notifyGuest(booking._id, "declined");
 
   return booking;
 };

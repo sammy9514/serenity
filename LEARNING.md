@@ -76,6 +76,43 @@ Insert-then-check places the booking first, then checks for any earlier overlapp
 ### findConflicts
 (fill in) The one query that defines "these dates are taken". Why availability and quote share it.
 
+
+### Webhooks (Stripe)
+A webhook is the payment provider's server telling my server what happened, with
+retries. The browser redirect is not a reliable signal: the tab can close or the
+network can drop, so a booking is never marked paid from the browser.
+Breaks without it: the database and Stripe disagree and nobody notices.
+
+### Verify before you trust
+`stripe.webhooks.constructEvent(rawBody, signature, secret)` proves the request
+really came from Stripe. This needs `express.raw()` registered BEFORE
+`express.json()`, because json parsing throws the raw bytes away and the
+signature is over those exact bytes. Without verification anyone who knows the
+URL could post "payment succeeded" and get a free stay.
+
+### At-least-once delivery
+Stripe retries on any non-2xx and can deliver the same event twice, so handlers
+must be safe to run again. `updateOne` setting a fixed value is naturally
+idempotent. Sending an email is NOT: duplicates mean the guest gets two.
+The fix I have not built yet: a processedEvents collection with a unique index
+on eventId, checked at the top of the handler.
+
+### Side effects must not break the critical path
+The booking and the payment are the critical path. Email is a side effect.
+A failed send is caught and logged inside the email service so a Resend outage
+can never fail a booking that already has the guest's money authorised.
+(Resend returns `{ error }` rather than throwing, so check both.)
+
+### Config before code when debugging
+Two Stripe accounts with different keys, then `stripe listen` without
+`--forward-to`. Both cost a day, neither was a code bug. When two systems cannot
+see each other's data, first prove they are pointed at the same place, then read
+the code. Ids often carry the answer (pi_... and evt_... embed the account).
+
+### "Property X does not exist on type 'never'"
+Means the code is unreachable, not that the property is missing. Look upward for
+an earlier return that already handled the case.
+
 ## Habits
 - Read the first line of the error before asking.
 - Comment-plan first when frozen, then fill one comment at a time.
