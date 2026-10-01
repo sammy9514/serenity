@@ -45,3 +45,35 @@ export const declineBooking = async (id: string) => {
   if (!res.ok) throw new Error(json?.error?.message ?? "Could not update this booking");
   return json.data;
 };
+
+export const uploadPhoto = async (input: {
+  slug: string;
+  file: File;
+  caption: string;
+  room: string;
+}) => {
+  const body = new FormData();
+  body.append("photo", input.file);
+  body.append("caption", input.caption);
+  body.append("room", input.room);
+
+  const res = await fetch(
+    `${API_URL}/api/v1/admin/listings/${input.slug}/photos`,
+    { method: "POST", credentials: "include", body },
+  );
+  const json = await res.json();
+  if (!res.ok)
+    throw new Error(json?.error?.message ?? "Could not upload that photo");
+  return json.data;
+};
+
+export const deletePhoto = async (input: { slug: string; photoId: string }) => {
+  const res = await fetch(
+    `${API_URL}/api/v1/admin/listings/${input.slug}/photos/${input.photoId}`,
+    { method: "DELETE", credentials: "include" },
+  );
+  const json = await res.json();
+  if (!res.ok)
+    throw new Error(json?.error?.message ?? "Could not delete that photo");
+  return json.data;
+};

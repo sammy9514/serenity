@@ -30,11 +30,12 @@ const ApartmentView = ({ listing }: Props) => {
           className="flex aspect-4/3 snap-x snap-mandatory overflow-x-auto [scrollbar-width:none]"
         >
           {listing.photos.map((photo) => (
-            <div
-              key={photo.caption}
-              className="flex w-full shrink-0 snap-center items-end bg-taupe p-3 text-xs uppercase tracking-widest text-ink/60"
-            >
-              {photo.caption}
+            <div key={photo._id} className="w-full shrink-0 snap-center">
+              <img
+                src={photo.url}
+                alt={photo.caption}
+                className="aspect-4/3 w-full object-cover"
+              />
             </div>
           ))}
         </div>
@@ -85,17 +86,23 @@ const ApartmentView = ({ listing }: Props) => {
 
       {/* desktop: the four-photo grid */}
       <div className="order-3 hidden gap-4 md:grid md:grid-cols-4">
-        <div className="flex aspect-4/3 items-end bg-taupe p-3 text-xs uppercase tracking-widest text-ink/60 md:col-span-2 md:row-span-2">
-          {hero?.caption}
+        <div className="aspect-4/3 bg-taupe md:col-span-2 md:row-span-2">
+          {hero && (
+            <img
+              src={hero.url}
+              alt={hero.caption}
+              className="h-full w-full object-cover"
+            />
+          )}
         </div>
         <div className="relative grid grid-cols-2 gap-4 md:col-span-2 md:row-span-2 md:aspect-4/3">
           {thumbnails.map((photo) => (
-            <div
-              key={photo.caption}
-              className="flex aspect-4/3 items-end bg-taupe p-3 text-xs uppercase tracking-widest text-ink/60"
-            >
-              {photo.caption}
-            </div>
+            <img
+              key={photo._id}
+              src={photo.url}
+              alt={photo.caption}
+              className="aspect-4/3 w-full bg-taupe object-cover"
+            />
           ))}
           <Link
             to={`/apartments/${listing.slug}/gallery`}

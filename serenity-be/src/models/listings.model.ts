@@ -14,7 +14,7 @@ const listingsSchema = new Schema(
     description: { type: [String], required: true },
     instantBook: { type: Boolean, required: true, default: false },
     cleaningFee: { type: Number, default: 0 },
-    photos: [{ url: String, caption: String, room: String }],
+    photos: [{ url: String, caption: String, room: String, publicId: String }],
     amenities: [{ label: String, category: String }],
   },
   { timestamps: true },

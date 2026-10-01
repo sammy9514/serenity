@@ -7,6 +7,7 @@ import Gallery from "./pages/Gallery";
 import AmenitiesPage from "./pages/AmenitiesPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminBooking from "./pages/AdminBooking";
+import AdminPhotos from "./pages/AdminPhotos";
 import BookingStatus from "./pages/BookingStatus";
 
 const App = () => {
@@ -21,6 +22,10 @@ const App = () => {
 
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminBooking />} />
+      <Route
+        path="/admin/listings/:slug/photos"
+        element={<AdminPhotos />}
+      />
       <Route path="/bookings/:reference" element={<BookingStatus />} />
     </Routes>
   );

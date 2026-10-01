@@ -17,10 +17,13 @@ const groupByRoom = (photos: Photo[]) => {
 };
 
 const Frame = ({ photo, wide = false }: { photo: Photo; wide?: boolean }) => (
-  <figure
-    className={`flex items-end bg-taupe p-3 ${wide ? "aspect-[16/9]" : "aspect-[4/3]"}`}
-  >
-    <figcaption className="text-xs uppercase tracking-widest text-ink/60">
+  <figure>
+    <img
+      src={photo.url}
+      alt={photo.caption}
+      className={`w-full bg-taupe object-cover ${wide ? "aspect-[16/9]" : "aspect-[4/3]"}`}
+    />
+    <figcaption className="mt-2 text-xs uppercase tracking-widest text-ink/60">
       {photo.caption}
     </figcaption>
   </figure>
