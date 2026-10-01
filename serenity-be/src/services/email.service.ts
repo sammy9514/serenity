@@ -137,3 +137,22 @@ export const sendDeclined = (booking: BookingEmail) =>
       ${linkBlock(`${process.env.CLIENT_ORIGIN}`, "See availability")}
     `,
   );
+
+export const sendExpired = (booking: BookingEmail) =>
+  send(
+    booking.guest.email,
+    `About your request · ${booking.reference}`,
+    `
+      <p style="font-size: 18px; margin: 0 0 16px;">Hello ${booking.guest.name},</p>
+      <p style="margin: 0 0 16px; line-height: 1.6;">
+        We were not able to confirm these dates in time, so your request has
+        expired. The authorisation on your card has been released and
+        <strong>you have not been charged</strong>.
+      </p>
+      ${details(booking)}
+      <p style="margin: 0 0 16px; line-height: 1.6;">
+        If your dates are still free, you are welcome to request them again.
+      </p>
+      ${linkBlock(`${process.env.CLIENT_ORIGIN}`, "See availability")}
+    `,
+  );

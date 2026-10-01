@@ -3,7 +3,11 @@ import { Booking } from "../models/booking.model";
 import { nightsBetween } from "../utils/dates";
 import { Types } from "mongoose";
 import { stripe } from "../utils/stripe";
-import { sendApproved, sendDeclined } from "./email.service";
+import {
+  sendApproved,
+  sendDeclined,
+  sendExpired,
+} from "./email.service";
 
 export class BookingError extends Error {
   constructor(
@@ -80,17 +84,14 @@ export const findConflicts = (
   }).select("checkIn checkOut -_id");
 };
 
-const notifyGuest = async (
-  bookingId: Types.ObjectId,
-  outcome: "approved" | "declined",
-) => {
+const emailPayload = async (bookingId: Types.ObjectId) => {
   const full = await Booking.findById(bookingId)
     .select("+accessToken")
     .populate<{ listing: { name: string } }>("listing", "name");
 
-  if (!full?.guest) return;
+  if (!full?.guest) return null;
 
-  const payload = {
+  return {
     reference: full.reference,
     accessToken: full.accessToken,
     guest: { name: full.guest.name, email: full.guest.email },
@@ -100,6 +101,14 @@ const notifyGuest = async (
     total: full.total,
     listingName: full.listing.name,
   };
+};
+
+const notifyGuest = async (
+  bookingId: Types.ObjectId,
+  outcome: "approved" | "declined",
+) => {
+  const payload = await emailPayload(bookingId);
+  if (!payload) return;
 
   if (outcome === "approved") await sendApproved(payload);
   else await sendDeclined(payload);
@@ -165,3 +174,33 @@ export const makeReference = () =>
     "",
   );
 export const makeAccessToken = () => randomBytes(32).toString("hex");
+
+export const expireStaleRequests = async () => {
+  const stale = await Booking.find({
+    status: "requested",
+    expiresAt: { $lt: new Date() },
+  });
+
+  let expired = 0;
+
+  for (const booking of stale) {
+    // one booking failing must not stop the rest of the batch
+    try {
+      if (booking.paymentIntentId) {
+        await stripe.paymentIntents.cancel(booking.paymentIntentId);
+        booking.paymentStatus = "released";
+      }
+
+      booking.status = "expired";
+      await booking.save();
+      expired += 1;
+
+      const payload = await emailPayload(booking._id);
+      if (payload) void sendExpired(payload);
+    } catch (err) {
+      console.error(`could not expire booking ${booking._id}`, err);
+    }
+  }
+
+  return expired;
+};
