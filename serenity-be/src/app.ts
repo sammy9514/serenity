@@ -5,8 +5,14 @@ import bookings from "./routes/bookings.route";
 import admin from "./routes/admin.route";
 import { errorHandler } from "./middleware/errorHandler";
 import cookieParser from "cookie-parser";
+import { stripeWebhook } from "./controllers/stripe.controller";
 
 export const app = express();
+app.post(
+  "/api/v1/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  stripeWebhook,
+);
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
