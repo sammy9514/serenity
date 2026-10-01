@@ -36,13 +36,13 @@ export const login = async (req: Request, res: Response) => {
 
   if (!token) throw new Error("token is not set");
 
-  // vercel.app and onrender.com are different sites, so the cookie must be
-  // sameSite "none" in production until the API moves to a subdomain of the site
+  // the site and the API share a registrable domain, so "lax" is enough and we
+  // avoid relying on third-party cookies
   const isProduction = process.env.NODE_ENV === "production";
 
   res.cookie("admin_token", token, {
     httpOnly: true,
-    sameSite: isProduction ? "none" : "lax",
+    sameSite: "lax",
     secure: isProduction,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
