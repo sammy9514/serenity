@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router";
+import { fetchListings } from "../api/listings";
 import { useState } from "react";
 import {
   approveBooking,
@@ -34,6 +36,11 @@ const AdminBooking = () => {
   const [status, setStatus] = useState("requested");
   const queryClient = useQueryClient();
 
+  const { data: listings } = useQuery({
+    queryKey: ["listings"],
+    queryFn: fetchListings,
+  });
+
   const {
     data: bookings,
     isPending,
@@ -68,6 +75,18 @@ const AdminBooking = () => {
               Serenity Space · host
             </p>
           </div>
+
+          <nav className="flex flex-wrap gap-2">
+            {listings?.map((listing) => (
+              <Link
+                key={listing.slug}
+                to={`/admin/listings/${listing.slug}/photos`}
+                className="border border-line px-3 py-2 text-xs font-bold uppercase tracking-widest hover:bg-taupe/40"
+              >
+                {listing.name} photos
+              </Link>
+            ))}
+          </nav>
         </div>
       </header>
 
