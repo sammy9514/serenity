@@ -5,6 +5,7 @@
   "scripts": {
     "test": "vitest",
     "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
     "seed": "tsx src/seed.ts",
     "expire": "tsx src/jobs/expire.ts"
   },
@@ -24,7 +25,8 @@
     "mongoose": "^9.10.1",
     "node-cron": "^4.6.0",
     "resend": "^6.31.0",
-    "stripe": "^22.6.2"
+    "stripe": "^22.6.2",
+    "tsx": "^4.23.13"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
@@ -32,8 +34,10 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.20.3",
-    "tsx": "^4.23.13",
     "typescript": "^7.0.2",
     "vitest": "^5.0.1"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
