@@ -13,9 +13,21 @@ app.post(
   express.raw({ type: "application/json" }),
   stripeWebhook,
 );
+// several origins are legitimate: the apex, the www alias, and the vercel
+// preview URL. anything else is refused.
+const allowedOrigins = (process.env.CLIENT_ORIGIN ?? "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    origin: (origin, callback) => {
+      // server-to-server calls and curl send no origin
+      if (!origin || allowedOrigins.includes(origin))
+        return callback(null, true);
+      return callback(new Error(`origin not allowed: ${origin}`));
+    },
     credentials: true,
   }),
 );
