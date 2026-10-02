@@ -5,7 +5,7 @@ import Photo from "./Photo";
 import { FiShare } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
 import { LuChevronLeft, LuHeart } from "react-icons/lu";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 type Props = {
   listing: Listing;
@@ -14,9 +14,44 @@ type Props = {
 const ApartmentView = ({ listing }: Props) => {
   const hero = listing.photos[0];
   const thumbnails = listing.photos.slice(1, 5);
+  const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
+  const savedKey = `saved:${listing.slug}`;
+  // read once at mount rather than in an effect, which would render twice
+  const [saved, setSaved] = useState(
+    () => localStorage.getItem(`saved:${listing.slug}`) === "1",
+  );
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
+
+  const toggleSaved = () => {
+    const next = !saved;
+    setSaved(next);
+    if (next) localStorage.setItem(savedKey, "1");
+    else localStorage.removeItem(savedKey);
+  };
+
+  const share = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: listing.name, url });
+      } catch {
+        // the guest dismissed the share sheet
+      }
+      return;
+    }
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const goBack = () => {
+    // history.length is 1 when the page was opened directly from a link
+    if (window.history.length > 1) navigate(-1);
+    else navigate("/#apartments");
+  };
+
   const onScroll = () => {
     const el = trackRef.current;
     if (!el) return;
@@ -45,17 +80,30 @@ const ApartmentView = ({ listing }: Props) => {
         <button
           type="button"
           aria-label="Go back"
-          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-cream"
+          onClick={goBack}
+          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-cream shadow-sm active:scale-95"
         >
           <LuChevronLeft />
         </button>
-        <button
-          type="button"
-          aria-label="Save"
-          className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-cream"
-        >
-          <LuHeart />
-        </button>
+        <div className="absolute right-4 top-4 flex gap-2">
+          <button
+            type="button"
+            aria-label="Share this apartment"
+            onClick={share}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-cream shadow-sm active:scale-95"
+          >
+            <FiShare />
+          </button>
+          <button
+            type="button"
+            aria-label={saved ? "Remove from saved" : "Save this apartment"}
+            aria-pressed={saved}
+            onClick={toggleSaved}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-cream shadow-sm active:scale-95"
+          >
+            <LuHeart className={saved ? "fill-ink text-ink" : ""} />
+          </button>
+        </div>
 
         <span className="absolute bottom-4 right-4 bg-ink px-3 py-2 text-xs font-bold text-cream">
           {index + 1} / {listing.photos.length}
@@ -78,24 +126,7 @@ const ApartmentView = ({ listing }: Props) => {
             [Neighbourhood, city]
           </div>
           <div className="hidden md:block">
-            <Button
-              variant="secondary"
-              onClick={async () => {
-                const url = window.location.href;
-                if (navigator.share) {
-                  try {
-                    await navigator.share({ title: listing.name, url });
-                    return;
-                  } catch {
-                    // the guest dismissed the share sheet
-                    return;
-                  }
-                }
-                await navigator.clipboard.writeText(url);
-                setCopied(true);
-                setTimeout(() => setCopied(false), 2000);
-              }}
-            >
+            <Button variant="secondary" onClick={share}>
               <FiShare />
               {copied ? "Link copied" : "Share"}
             </Button>
