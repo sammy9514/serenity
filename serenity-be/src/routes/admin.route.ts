@@ -1,6 +1,10 @@
 import { Router, type Request, type Response } from "express";
 import multer from "multer";
-import { addPhoto, deletePhoto } from "../controllers/photos.controller";
+import {
+  addPhoto,
+  deletePhoto,
+  makeCoverPhoto,
+} from "../controllers/photos.controller";
 import { login } from "../controllers/login.controller";
 import { requireAdmin } from "../middleware/requireAdmin";
 import { approve, decline } from "../controllers/bookings.controller";
@@ -30,5 +34,9 @@ router
 router
   .route("/admin/listings/:slug/photos/:photoId")
   .delete(requireAdmin, deletePhoto);
+
+router
+  .route("/admin/listings/:slug/photos/:photoId/cover")
+  .patch(requireAdmin, makeCoverPhoto);
 
 export default router;

@@ -66,3 +66,33 @@ export const deletePhoto = async (req: Request, res: Response) => {
 
   return res.json({ data: { ok: true } });
 };
+
+export const makeCoverPhoto = async (req: Request, res: Response) => {
+  const { slug, photoId } = req.params;
+
+  if (typeof slug !== "string" || typeof photoId !== "string")
+    return res
+      .status(400)
+      .json({ error: { code: "BAD_REQUEST", message: "invalid request" } });
+
+  const listing = await Listing.findOne({ slug });
+  if (!listing)
+    return res
+      .status(404)
+      .json({ error: { code: "NOT_FOUND", message: "listing not found" } });
+
+  const index = listing.photos.findIndex(
+    (photo) => String(photo._id) === photoId,
+  );
+  if (index < 0)
+    return res
+      .status(404)
+      .json({ error: { code: "NOT_FOUND", message: "photo not found" } });
+
+  // the first photo is the one used across the site, so "make cover" is a move
+  const [photo] = listing.photos.splice(index, 1);
+  if (photo) listing.photos.unshift(photo);
+  await listing.save();
+
+  return res.json({ data: listing.photos });
+};

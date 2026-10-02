@@ -77,3 +77,17 @@ export const deletePhoto = async (input: { slug: string; photoId: string }) => {
     throw new Error(json?.error?.message ?? "Could not delete that photo");
   return json.data;
 };
+
+export const makeCoverPhoto = async (input: {
+  slug: string;
+  photoId: string;
+}) => {
+  const res = await fetch(
+    `${API_URL}/api/v1/admin/listings/${input.slug}/photos/${input.photoId}/cover`,
+    { method: "PATCH", credentials: "include" },
+  );
+  const json = await res.json();
+  if (!res.ok)
+    throw new Error(json?.error?.message ?? "Could not update the order");
+  return json.data;
+};

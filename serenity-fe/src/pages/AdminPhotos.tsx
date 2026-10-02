@@ -2,9 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type React from "react";
 import { Link, useParams } from "react-router";
-import { LuChevronLeft, LuTrash2 } from "react-icons/lu";
+import { LuChevronLeft, LuStar, LuTrash2 } from "react-icons/lu";
 import { fetchListing } from "../api/listings";
-import { deletePhoto, uploadPhoto } from "../api/admin";
+import { deletePhoto, makeCoverPhoto, uploadPhoto } from "../api/admin";
 import Button from "../components/Button";
 
 const rooms = [
@@ -47,6 +47,13 @@ const AdminPhotos = () => {
   });
 
   const remove = useMutation({ mutationFn: deletePhoto, onSuccess: refresh });
+
+  const setCover = useMutation({
+    mutationFn: makeCoverPhoto,
+    onSuccess: refresh,
+  });
+
+  const busy = remove.isPending || setCover.isPending;
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,12 +149,24 @@ const AdminPhotos = () => {
           </p>
         </form>
 
-        <h2 className="mt-10 font-display text-xl">
-          {listing.photos.length} photos
-        </h2>
+        <div className="mt-10 flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="font-display text-xl">
+            {listing.photos.length} photos
+          </h2>
+          <p className="text-sm text-ink/70">
+            The first photo is used across the site. Use the star to promote
+            one.
+          </p>
+        </div>
+
+        {(remove.error || setCover.error) && (
+          <p className="mt-3 text-sm text-red-700">
+            {(remove.error ?? setCover.error)?.message}
+          </p>
+        )}
 
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {listing.photos.map((photo) => (
+          {listing.photos.map((photo, index) => (
             <figure key={photo._id} className="border border-line bg-white">
               <img
                 src={photo.url}
@@ -158,22 +177,38 @@ const AdminPhotos = () => {
                 <span className="text-sm">
                   {photo.caption}
                   <span className="block text-xs text-ink/60">
+                    {index === 0 ? "Cover photo · " : ""}
                     {photo.room}
                   </span>
                 </span>
-                <button
-                  type="button"
-                  aria-label={`Delete ${photo.caption}`}
-                  disabled={remove.isPending}
-                  onClick={() => {
-                    if (!slug) return;
-                    if (confirm(`Delete "${photo.caption}"?`))
-                      remove.mutate({ slug, photoId: photo._id });
-                  }}
-                  className="text-ink/60 hover:text-red-700"
-                >
-                  <LuTrash2 />
-                </button>
+                <span className="flex shrink-0 gap-3">
+                  {index !== 0 && (
+                    <button
+                      type="button"
+                      aria-label={`Make ${photo.caption} the cover photo`}
+                      disabled={busy}
+                      onClick={() => {
+                        if (slug) setCover.mutate({ slug, photoId: photo._id });
+                      }}
+                      className="text-ink/60 hover:text-ink disabled:opacity-40"
+                    >
+                      <LuStar />
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    aria-label={`Delete ${photo.caption}`}
+                    disabled={busy}
+                    onClick={() => {
+                      if (!slug) return;
+                      if (confirm(`Delete "${photo.caption}"?`))
+                        remove.mutate({ slug, photoId: photo._id });
+                    }}
+                    className="text-ink/60 hover:text-red-700 disabled:opacity-40"
+                  >
+                    <LuTrash2 />
+                  </button>
+                </span>
               </figcaption>
             </figure>
           ))}
