@@ -137,8 +137,8 @@ const AdminPhotos = () => {
 
           <p className="text-xs text-ink/60">
             JPEG or PNG, up to 5MB. The first photo of each room is used as that
-            room's lead image, and the first photo overall is the main one on the
-            apartment page.
+            room's lead image, and the first photo overall is the main one on
+            the apartment page.
           </p>
         </form>
 
@@ -157,7 +157,9 @@ const AdminPhotos = () => {
               <figcaption className="flex items-start justify-between gap-2 p-3">
                 <span className="text-sm">
                   {photo.caption}
-                  <span className="block text-xs text-ink/60">{photo.room}</span>
+                  <span className="block text-xs text-ink/60">
+                    {photo.room}
+                  </span>
                 </span>
                 <button
                   type="button"

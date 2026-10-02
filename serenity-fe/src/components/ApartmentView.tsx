@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import type { Listing } from "../types";
 import Button from "./Button";
+import Photo from "./Photo";
 import { FiShare } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
 import { LuChevronLeft, LuHeart } from "react-icons/lu";
@@ -13,6 +14,7 @@ type Props = {
 const ApartmentView = ({ listing }: Props) => {
   const hero = listing.photos[0];
   const thumbnails = listing.photos.slice(1, 5);
+  const [copied, setCopied] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const onScroll = () => {
@@ -31,10 +33,10 @@ const ApartmentView = ({ listing }: Props) => {
         >
           {listing.photos.map((photo) => (
             <div key={photo._id} className="w-full shrink-0 snap-center">
-              <img
-                src={photo.url}
-                alt={photo.caption}
-                className="aspect-4/3 w-full object-cover"
+              <Photo
+                url={photo.url}
+                caption={photo.caption}
+                className="aspect-4/3 w-full"
               />
             </div>
           ))}
@@ -76,9 +78,26 @@ const ApartmentView = ({ listing }: Props) => {
             [Neighbourhood, city]
           </div>
           <div className="hidden md:block">
-            <Button variant="secondary">
+            <Button
+              variant="secondary"
+              onClick={async () => {
+                const url = window.location.href;
+                if (navigator.share) {
+                  try {
+                    await navigator.share({ title: listing.name, url });
+                    return;
+                  } catch {
+                    // the guest dismissed the share sheet
+                    return;
+                  }
+                }
+                await navigator.clipboard.writeText(url);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+            >
               <FiShare />
-              Share
+              {copied ? "Link copied" : "Share"}
             </Button>
           </div>
         </div>
@@ -86,22 +105,22 @@ const ApartmentView = ({ listing }: Props) => {
 
       {/* desktop: the four-photo grid */}
       <div className="order-3 hidden gap-4 md:grid md:grid-cols-4">
-        <div className="aspect-4/3 bg-taupe md:col-span-2 md:row-span-2">
+        <div className="md:col-span-2 md:row-span-2">
           {hero && (
-            <img
-              src={hero.url}
-              alt={hero.caption}
-              className="h-full w-full object-cover"
+            <Photo
+              url={hero.url}
+              caption={hero.caption}
+              className="aspect-4/3 h-full w-full"
             />
           )}
         </div>
         <div className="relative grid grid-cols-2 gap-4 md:col-span-2 md:row-span-2 md:aspect-4/3">
           {thumbnails.map((photo) => (
-            <img
+            <Photo
               key={photo._id}
-              src={photo.url}
-              alt={photo.caption}
-              className="aspect-4/3 w-full bg-taupe object-cover"
+              url={photo.url}
+              caption={photo.caption}
+              className="aspect-4/3 w-full"
             />
           ))}
           <Link

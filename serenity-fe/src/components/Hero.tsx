@@ -18,7 +18,9 @@ const Hero = () => {
           </p>
         </div>
         <div className="pt-6">
-          <Button variant="primary">Book Now</Button>
+          <Button variant="primary" href="#apartments">
+            See the apartments
+          </Button>
         </div>
       </div>
     </section>

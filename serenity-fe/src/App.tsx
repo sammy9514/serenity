@@ -22,10 +22,7 @@ const App = () => {
 
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminBooking />} />
-      <Route
-        path="/admin/listings/:slug/photos"
-        element={<AdminPhotos />}
-      />
+      <Route path="/admin/listings/:slug/photos" element={<AdminPhotos />} />
       <Route path="/bookings/:reference" element={<BookingStatus />} />
     </Routes>
   );

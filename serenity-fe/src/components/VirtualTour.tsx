@@ -2,7 +2,10 @@ import { LuPlay } from "react-icons/lu";
 
 const VirtualTour = () => {
   return (
-    <section className="mt-12 border-t border-line pt-12">
+    <section
+      id="tour"
+      className="mt-12 scroll-mt-24 border-t border-line pt-12"
+    >
       <div className="flex items-end justify-between">
         <h2 className="font-display text-3xl">Virtual tour</h2>
         <p className="text-sm text-ink/70 hidden md:block">

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import { LuChevronLeft, LuHeart, LuShare } from "react-icons/lu";
 import { fetchListing } from "../api/listings";
 import type { Listing } from "../types";
+import Photo from "../components/Photo";
 
 type Photo = Listing["photos"][number];
 
@@ -18,10 +19,10 @@ const groupByRoom = (photos: Photo[]) => {
 
 const Frame = ({ photo, wide = false }: { photo: Photo; wide?: boolean }) => (
   <figure>
-    <img
-      src={photo.url}
-      alt={photo.caption}
-      className={`w-full bg-taupe object-cover ${wide ? "aspect-[16/9]" : "aspect-[4/3]"}`}
+    <Photo
+      url={photo.url}
+      caption={photo.caption}
+      className={`w-full ${wide ? "aspect-[16/9]" : "aspect-[4/3]"}`}
     />
     <figcaption className="mt-2 text-xs uppercase tracking-widest text-ink/60">
       {photo.caption}

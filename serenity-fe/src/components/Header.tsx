@@ -1,26 +1,36 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import Button from "./Button";
 import { RxHamburgerMenu } from "react-icons/rx";
+
+const links = [
+  { label: "Apartments", href: "/#apartments" },
+  { label: "Why book direct", href: "/#why" },
+  { label: "Contact", href: "/#contact" },
+];
 
 const Header = () => {
   const [menuOpen, setmenuOpen] = useState<boolean>(false);
   return (
     <header className="bg-ink text-cream relative">
       <div className="mx-auto flex h-25 max-w-page items-center justify-between px-6">
-        <a href="/" className="flex flex-col ">
+        <Link to="/" className="flex flex-col">
           <span className="text-2xl tracking-widest">Serenity Space</span>
           <span className="text-xs tracking-widest text-line">
             Luxury Homes
           </span>
-        </a>
-        <nav className="md:flex gap-10 hidden ">
-          <a href="#">The Apartment</a>
-          <a href="#">Amenities</a>
-          <a href="#">Location</a>
-          <a href="#">Contact</a>
+        </Link>
+        <nav className="hidden gap-10 md:flex">
+          {links.map((link) => (
+            <a key={link.href} href={link.href} className="hover:text-taupe">
+              {link.label}
+            </a>
+          ))}
         </nav>
         <div className="hidden md:block">
-          <Button variant="onDark">Book Now</Button>
+          <Button variant="onDark" href="/#apartments">
+            Book now
+          </Button>
         </div>
 
         <button
@@ -33,12 +43,19 @@ const Header = () => {
         </button>
       </div>
       {menuOpen && (
-        <nav className="flex flex-col md:hidden items-center gap-6 pb-6 ">
-          <a href="#">The Apartment</a>
-          <a href="#">Amenities</a>
-          <a href="#">Location</a>
-          <a href="#">Contact</a>
-          <Button variant="onDark">Book Now</Button>
+        <nav className="flex flex-col items-center gap-6 pb-6 md:hidden">
+          {links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setmenuOpen(false)}
+            >
+              {link.label}
+            </a>
+          ))}
+          <Button variant="onDark" href="/#apartments">
+            Book now
+          </Button>
         </nav>
       )}
     </header>

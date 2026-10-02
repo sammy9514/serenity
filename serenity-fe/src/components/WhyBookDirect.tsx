@@ -14,7 +14,7 @@ const whyBook = [
 ];
 const WhyBookDirect = () => {
   return (
-    <section>
+    <section id="why" className="scroll-mt-28">
       <div className="my-20 border-t border-line " />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {whyBook.map((desc) => (
