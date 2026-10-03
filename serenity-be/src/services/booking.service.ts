@@ -22,6 +22,18 @@ type QuotableListing = {
   cleaningFee: number;
   minNights: number;
   sleeps: number;
+  baseGuests?: number;
+  extraGuestRate?: number;
+};
+
+const round2 = (value: number) => Math.round(value * 100) / 100;
+
+/** base rate covers baseGuests; every guest above that adds a share of it */
+export const nightlyRateFor = (listing: QuotableListing, guests: number) => {
+  const baseGuests = listing.baseGuests ?? 2;
+  const extraRate = listing.extraGuestRate ?? 0;
+  const extraGuests = Math.max(0, guests - baseGuests);
+  return round2(listing.pricePerNight * (1 + extraRate * extraGuests));
 };
 
 export const computeQuote = (
@@ -50,10 +62,10 @@ export const computeQuote = (
       `guests must be between 1 and ${listing.sleeps}`,
     );
 
-  const subtotal = nights * listing.pricePerNight;
+  const pricePerNight = nightlyRateFor(listing, guests);
+  const subtotal = round2(nights * pricePerNight);
   const cleaningFee = listing.cleaningFee;
-  const total = subtotal + cleaningFee;
-  const pricePerNight = listing.pricePerNight;
+  const total = round2(subtotal + cleaningFee);
 
   return { nights, pricePerNight, cleaningFee, subtotal, total };
 };

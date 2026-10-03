@@ -102,9 +102,9 @@ const BookingsQuote = ({
     <div className="sticky top-6 mt-10 flex flex-col gap-3 self-start border border-line bg-cream p-5 text-sm">
       <div className="flex items-baseline gap-2">
         <span className="font-display text-3xl leading-none">
-          £{listing.pricePerNight}
+          £{quote ? quote.pricePerNight : listing.pricePerNight}
         </span>
-        <span className="text-ink/70">per night</span>
+        <span className="text-ink/70">per night{quote ? "" : " · from"}</span>
       </div>
 
       <div className="grid grid-cols-2">
@@ -158,7 +158,7 @@ const BookingsQuote = ({
           <div className="flex flex-col gap-2 border-t border-line pt-3">
             <div className="flex justify-between">
               <span>
-                £{listing.pricePerNight} × {quote.nights} nights
+                £{quote.pricePerNight} × {quote.nights} nights
               </span>
               <span>£{quote.subtotal.toLocaleString()}</span>
             </div>

@@ -5,7 +5,11 @@ const listingsSchema = new Schema(
     slug: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     summary: { type: String, required: true },
+    // the nightly rate for up to baseGuests people
     pricePerNight: { type: Number, required: true, min: 0 },
+    baseGuests: { type: Number, required: true, default: 2 },
+    // each guest beyond baseGuests adds this share of the base rate
+    extraGuestRate: { type: Number, required: true, default: 0.25 },
     sleeps: { type: Number, required: true },
     bedrooms: { type: Number, required: true },
     beds: { type: Number, required: true },

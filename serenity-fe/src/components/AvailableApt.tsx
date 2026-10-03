@@ -48,11 +48,17 @@ const AvailableApt = () => {
                 <p className="pb-5 text-sm text-ink/80">{apt.summary}</p>
 
                 <div className="mt-auto flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="flex items-baseline gap-2">
-                    <span className="font-display text-3xl">
-                      £{apt.pricePerNight}
+                  <p className="flex flex-col">
+                    <span className="flex items-baseline gap-2">
+                      <span className="font-display text-3xl">
+                        £{apt.pricePerNight}
+                      </span>
+                      <span className="text-sm text-ink/70">per night</span>
                     </span>
-                    <span className="text-sm text-ink/70">per night</span>
+                    <span className="text-xs text-ink/60">
+                      for {apt.baseGuests} guests · +
+                      {Math.round(apt.extraGuestRate * 100)}% per extra guest
+                    </span>
                   </p>
                   <div className="flex gap-3">
                     <Button variant="secondary" to={`/apartments/${apt.slug}`}>

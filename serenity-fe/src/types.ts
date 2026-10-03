@@ -4,6 +4,8 @@ export interface Listing {
   name: string;
   summary: string;
   pricePerNight: number;
+  baseGuests: number;
+  extraGuestRate: number;
   sleeps: number;
   beds: number;
   bathrooms: number;
@@ -44,11 +46,7 @@ export type BookedRange = {
 };
 
 export type BookingStatus =
-  | "requested"
-  | "confirmed"
-  | "declined"
-  | "expired"
-  | "cancelled";
+  "requested" | "confirmed" | "declined" | "expired" | "cancelled";
 
 export type AdminBooking = {
   _id: string;

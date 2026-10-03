@@ -33,7 +33,8 @@ export const approveBooking = async (id: string) => {
     credentials: "include",
   });
   const json = await res.json();
-  if (!res.ok) throw new Error(json?.error?.message ?? "Could not update this booking");
+  if (!res.ok)
+    throw new Error(json?.error?.message ?? "Could not update this booking");
   return json.data;
 };
 export const declineBooking = async (id: string) => {
@@ -42,7 +43,8 @@ export const declineBooking = async (id: string) => {
     credentials: "include",
   });
   const json = await res.json();
-  if (!res.ok) throw new Error(json?.error?.message ?? "Could not update this booking");
+  if (!res.ok)
+    throw new Error(json?.error?.message ?? "Could not update this booking");
   return json.data;
 };
 
