@@ -10,7 +10,8 @@
     "expire": "tsx src/jobs/expire.ts",
     "update-listings": "tsx src/jobs/updateListings.ts",
     "upload-tour": "tsx src/jobs/uploadTour.ts",
-    "update-content": "tsx src/jobs/updateContent.ts"
+    "update-content": "tsx src/jobs/updateContent.ts",
+    "upload-photos": "tsx src/jobs/uploadPhotos.ts"
   },
   "keywords": [],
   "author": "",

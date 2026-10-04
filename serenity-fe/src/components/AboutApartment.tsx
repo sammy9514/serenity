@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MdOutlineBathroom, MdOutlineBedroomChild } from "react-icons/md";
 import type { Listing } from "../types";
 import { LuCalendar, LuUsers } from "react-icons/lu";
@@ -6,6 +7,8 @@ type Props = {
 };
 
 const AboutApartment = ({ listing }: Props) => {
+  const [expanded, setExpanded] = useState(false);
+
   const facts = [
     {
       icon: <MdOutlineBedroomChild />,
@@ -75,8 +78,31 @@ const AboutApartment = ({ listing }: Props) => {
       </div>
       <div className="my-10 border-t border-line " />
 
-      <h2 className="font-display text-3xl ">About this apartment</h2>
-      <p className=" mt-5">{listing.description}</p>
+      <h2 className="font-display text-3xl">About this apartment</h2>
+
+      <div className="mt-5 max-w-2xl">
+        {listing.description.map((paragraph, i) => (
+          <p
+            key={paragraph.slice(0, 40)}
+            className={`mt-4 leading-relaxed first:mt-0 ${
+              i > 1 && !expanded ? "hidden sm:block" : ""
+            }`}
+          >
+            {paragraph}
+          </p>
+        ))}
+
+        {listing.description.length > 2 && (
+          <button
+            type="button"
+            onClick={() => setExpanded(!expanded)}
+            aria-expanded={expanded}
+            className="mt-4 text-sm font-bold underline underline-offset-4 sm:hidden"
+          >
+            {expanded ? "Show less" : "Show more"}
+          </button>
+        )}
+      </div>
       <div className="my-10 border-t border-line " />
     </div>
   );
