@@ -4,7 +4,7 @@ import Button from "./Button";
 import Photo from "./Photo";
 import { FiShare } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
-import { LuChevronLeft, LuChevronRight, LuHeart } from "react-icons/lu";
+import { LuChevronLeft, LuHeart } from "react-icons/lu";
 import { Link, useNavigate } from "react-router";
 
 type Props = {
@@ -12,6 +12,8 @@ type Props = {
 };
 
 const ApartmentView = ({ listing }: Props) => {
+  const hero = listing.photos[0];
+  const thumbnails = listing.photos.slice(1, 5);
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const savedKey = `saved:${listing.slug}`;
@@ -48,27 +50,6 @@ const ApartmentView = ({ listing }: Props) => {
     // history.length is 1 when the page was opened directly from a link
     if (window.history.length > 1) navigate(-1);
     else navigate("/#apartments");
-  };
-
-  const desktopRef = useRef<HTMLDivElement>(null);
-  const [desktopIndex, setDesktopIndex] = useState(0);
-
-  const onDesktopScroll = () => {
-    const el = desktopRef.current;
-    if (!el) return;
-    setDesktopIndex(Math.round(el.scrollLeft / el.clientWidth));
-  };
-
-  const goTo = (i: number) => {
-    const el = desktopRef.current;
-    if (!el) return;
-    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
-  };
-
-  const step = (direction: 1 | -1) => {
-    const last = listing.photos.length - 1;
-    const next = Math.min(last, Math.max(0, desktopIndex + direction));
-    goTo(next);
   };
 
   const onScroll = () => {
@@ -157,76 +138,33 @@ const ApartmentView = ({ listing }: Props) => {
         </div>
       </div>
 
-      {/* desktop: one large carousel with arrows and a thumbnail strip */}
-      <div className="order-3 hidden md:block">
-        <div className="relative">
-          <div
-            ref={desktopRef}
-            onScroll={onDesktopScroll}
-            className="flex aspect-[16/9] snap-x snap-mandatory overflow-x-auto [scrollbar-width:none]"
-          >
-            {listing.photos.map((photo) => (
-              <div key={photo._id} className="w-full shrink-0 snap-center">
-                <Photo
-                  url={photo.url}
-                  caption={photo.caption}
-                  className="h-full w-full"
-                />
-              </div>
-            ))}
-          </div>
-
-          {listing.photos.length > 1 && (
-            <>
-              <button
-                type="button"
-                aria-label="Previous photo"
-                onClick={() => step(-1)}
-                className="absolute left-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-cream/90 shadow-sm hover:bg-cream"
-              >
-                <LuChevronLeft />
-              </button>
-              <button
-                type="button"
-                aria-label="Next photo"
-                onClick={() => step(1)}
-                className="absolute right-4 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-cream/90 shadow-sm hover:bg-cream"
-              >
-                <LuChevronRight />
-              </button>
-            </>
+      {/* desktop: hero photo plus a four-photo grid */}
+      <div className="order-3 hidden gap-4 md:grid md:grid-cols-4">
+        <div className="md:col-span-2 md:row-span-2">
+          {hero && (
+            <Photo
+              url={hero.url}
+              caption={hero.caption}
+              className="aspect-4/3 h-full w-full"
+            />
           )}
-
+        </div>
+        <div className="relative grid grid-cols-2 gap-4 md:col-span-2 md:row-span-2 md:aspect-4/3">
+          {thumbnails.map((photo) => (
+            <Photo
+              key={photo._id}
+              url={photo.url}
+              caption={photo.caption}
+              className="aspect-4/3 w-full"
+              width={600}
+            />
+          ))}
           <Link
             to={`/apartments/${listing.slug}/gallery`}
-            className="absolute bottom-4 right-4 border border-line bg-cream px-4 py-2 text-sm"
+            className="absolute bottom-3 right-3 border border-line bg-cream px-4 py-2 text-sm"
           >
             Show all {listing.photos.length} photos
           </Link>
-
-          <span className="absolute bottom-4 left-4 bg-ink px-3 py-2 text-xs font-bold text-cream">
-            {desktopIndex + 1} / {listing.photos.length}
-          </span>
-        </div>
-
-        <div className="mt-3 flex gap-3 overflow-x-auto [scrollbar-width:none]">
-          {listing.photos.map((photo, i) => (
-            <button
-              key={photo._id}
-              type="button"
-              aria-label={`Show ${photo.caption}`}
-              aria-current={i === desktopIndex}
-              onClick={() => goTo(i)}
-              className={`w-28 shrink-0 ${i === desktopIndex ? "opacity-100" : "opacity-60 hover:opacity-100"}`}
-            >
-              <Photo
-                url={photo.url}
-                caption={photo.caption}
-                className="aspect-4/3 w-full"
-                width={300}
-              />
-            </button>
-          ))}
         </div>
       </div>
     </section>
