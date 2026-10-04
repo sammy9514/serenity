@@ -93,3 +93,17 @@ export const makeCoverPhoto = async (input: {
     throw new Error(json?.error?.message ?? "Could not update the order");
   return json.data;
 };
+
+export const uploadTourVideo = async (input: { slug: string; file: File }) => {
+  const body = new FormData();
+  body.append("video", input.file);
+
+  const res = await fetch(
+    `${API_URL}/api/v1/admin/listings/${input.slug}/tour`,
+    { method: "POST", credentials: "include", body },
+  );
+  const json = await res.json();
+  if (!res.ok)
+    throw new Error(json?.error?.message ?? "Could not upload that video");
+  return json.data;
+};

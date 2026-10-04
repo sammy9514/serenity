@@ -4,7 +4,12 @@ import type React from "react";
 import { Link, useParams } from "react-router";
 import { LuChevronLeft, LuStar, LuTrash2 } from "react-icons/lu";
 import { fetchListing } from "../api/listings";
-import { deletePhoto, makeCoverPhoto, uploadPhoto } from "../api/admin";
+import {
+  deletePhoto,
+  makeCoverPhoto,
+  uploadPhoto,
+  uploadTourVideo,
+} from "../api/admin";
 import Button from "../components/Button";
 
 const rooms = [
@@ -22,6 +27,7 @@ const AdminPhotos = () => {
   const queryClient = useQueryClient();
 
   const [file, setFile] = useState<File | null>(null);
+  const [video, setVideo] = useState<File | null>(null);
   const [caption, setCaption] = useState("");
   const [room, setRoom] = useState(rooms[0]!);
 
@@ -47,6 +53,14 @@ const AdminPhotos = () => {
   });
 
   const remove = useMutation({ mutationFn: deletePhoto, onSuccess: refresh });
+
+  const tour = useMutation({
+    mutationFn: uploadTourVideo,
+    onSuccess: () => {
+      setVideo(null);
+      refresh();
+    },
+  });
 
   const setCover = useMutation({
     mutationFn: makeCoverPhoto,
@@ -146,6 +160,51 @@ const AdminPhotos = () => {
             JPEG or PNG, up to 5MB. The first photo of each room is used as that
             room's lead image, and the first photo overall is the main one on
             the apartment page.
+          </p>
+        </form>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (video && slug) tour.mutate({ slug, file: video });
+          }}
+          className="mt-6 flex flex-col gap-4 border border-line bg-white p-5"
+        >
+          <h2 className="font-display text-xl">Virtual tour video</h2>
+
+          {listing.tourVideoUrl && (
+            <video
+              src={listing.tourVideoUrl}
+              controls
+              preload="metadata"
+              className="aspect-video w-full max-w-md bg-ink"
+            />
+          )}
+
+          <input
+            type="file"
+            accept="video/*"
+            onChange={(e) => setVideo(e.target.files?.[0] ?? null)}
+            className="text-sm"
+            required
+          />
+
+          {tour.error && (
+            <p className="text-sm text-red-700">{tour.error.message}</p>
+          )}
+
+          <div className="grid sm:inline-grid sm:justify-start">
+            <Button type="submit" disabled={tour.isPending || !video}>
+              {tour.isPending
+                ? "Uploading…"
+                : listing.tourVideoUrl
+                  ? "Replace video"
+                  : "Upload video"}
+            </Button>
+          </div>
+
+          <p className="text-xs text-ink/60">
+            MP4 or MOV, up to 100MB. Uploading replaces the current tour.
           </p>
         </form>
 

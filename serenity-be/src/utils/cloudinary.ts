@@ -27,3 +27,15 @@ export const uploadImage = (buffer: Buffer, folder: string) =>
 
 export const deleteImage = (publicId: string) =>
   cloudinary.uploader.destroy(publicId);
+
+export const uploadVideo = (buffer: Buffer, folder: string) =>
+  new Promise<{ url: string; publicId: string }>((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder, resource_type: "video" },
+      (error, result) => {
+        if (error || !result) return reject(error ?? new Error("upload failed"));
+        resolve({ url: result.secure_url, publicId: result.public_id });
+      },
+    );
+    stream.end(buffer);
+  });

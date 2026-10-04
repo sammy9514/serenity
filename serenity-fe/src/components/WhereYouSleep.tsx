@@ -1,26 +1,40 @@
-const WhereYouSleep = () => {
-  const sleepInfo = [
-    { roomType: "Mater Bedroom", roomInfo: "1 king bed · ensuite · sleeps 2" },
-    { roomType: "Mater Bedroom", roomInfo: "1  bed · ensuite · sleeps 2" },
-    { roomType: "Mater Bedroom", roomInfo: "1 king  · ensuite · sleeps 2" },
-  ];
+import type { Listing } from "../types";
+import Photo from "./Photo";
+
+type Props = {
+  listing: Listing;
+};
+
+const WhereYouSleep = ({ listing }: Props) => {
+  const rooms = listing.rooms ?? [];
+  if (rooms.length === 0) return null;
 
   return (
-    <div>
-      <h2 className="text-3xl font-display ">Where you'll sleep</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {sleepInfo.map((info) => (
-          <div key={info.roomInfo}>
-            <div className="aspect-4/3 bg-taupe p-3 flex items-end mt-5 ">
-              {info.roomType}
-            </div>
+    <section className="mt-12 border-t border-line pt-12">
+      <h2 className="font-display text-3xl">Where you'll sleep</h2>
 
-            <h3 className="font-semibold text-lg mt-3 ">{info.roomType} </h3>
-            <p>{info.roomInfo}</p>
-          </div>
-        ))}
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {rooms.map((room) => {
+          // the image is whichever photo the client tagged with this room
+          const photo = listing.photos.find(
+            (p) => p.room.toLowerCase() === room.name.toLowerCase(),
+          );
+
+          return (
+            <div key={room.name}>
+              <Photo
+                url={photo?.url}
+                caption={room.name}
+                className="aspect-4/3 w-full"
+                width={600}
+              />
+              <h3 className="mt-3 text-lg font-semibold">{room.name}</h3>
+              <p className="text-sm text-ink/70">{room.beds}</p>
+            </div>
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 };
 

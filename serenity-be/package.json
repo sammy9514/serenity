@@ -11,7 +11,8 @@
     "update-listings": "tsx src/jobs/updateListings.ts",
     "upload-tour": "tsx src/jobs/uploadTour.ts",
     "update-content": "tsx src/jobs/updateContent.ts",
-    "upload-photos": "tsx src/jobs/uploadPhotos.ts"
+    "upload-photos": "tsx src/jobs/uploadPhotos.ts",
+    "update-rooms": "tsx src/jobs/updateRooms.ts"
   },
   "keywords": [],
   "author": "",

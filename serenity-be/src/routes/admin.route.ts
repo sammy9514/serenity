@@ -4,6 +4,7 @@ import {
   addPhoto,
   deletePhoto,
   makeCoverPhoto,
+  setTourVideo,
 } from "../controllers/photos.controller";
 import { login } from "../controllers/login.controller";
 import { requireAdmin } from "../middleware/requireAdmin";
@@ -17,6 +18,12 @@ const router = Router();
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
+});
+
+// a walkthrough video is much larger than a photo
+const uploadVideoFile = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 100 * 1024 * 1024 },
 });
 const me = (req: Request, res: Response) =>
   res.json({ data: { role: "admin" } });
@@ -38,5 +45,9 @@ router
 router
   .route("/admin/listings/:slug/photos/:photoId/cover")
   .patch(requireAdmin, makeCoverPhoto);
+
+router
+  .route("/admin/listings/:slug/tour")
+  .post(requireAdmin, uploadVideoFile.single("video"), setTourVideo);
 
 export default router;

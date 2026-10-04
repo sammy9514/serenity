@@ -22,6 +22,7 @@ export interface Listing {
     town?: string;
     postcode?: string;
   };
+  rooms?: { name: string; beds: string }[];
   tourVideoUrl?: string;
 }
 

@@ -36,7 +36,7 @@ const Apartment = () => {
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_450px] gap-10 lg:gap-20">
         <div className="min-w-0">
           <AboutApartment listing={listing} />
-          <WhereYouSleep />
+          <WhereYouSleep listing={listing} />
           <VirtualTour listing={listing} />
           <AvailabilityCalendar
             listing={listing}

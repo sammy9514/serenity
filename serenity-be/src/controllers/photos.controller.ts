@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { Listing } from "../models/listings.model";
-import { deleteImage, uploadImage } from "../utils/cloudinary";
+import { deleteImage, uploadImage, uploadVideo } from "../utils/cloudinary";
 
 export const addPhoto = async (req: Request, res: Response) => {
   const { slug } = req.params;
@@ -95,4 +95,25 @@ export const makeCoverPhoto = async (req: Request, res: Response) => {
   await listing.save();
 
   return res.json({ data: listing.photos });
+};
+
+export const setTourVideo = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+
+  if (typeof slug !== "string" || !req.file)
+    return res
+      .status(400)
+      .json({ error: { code: "BAD_REQUEST", message: "a video is required" } });
+
+  const listing = await Listing.findOne({ slug });
+  if (!listing)
+    return res
+      .status(404)
+      .json({ error: { code: "NOT_FOUND", message: "listing not found" } });
+
+  const { url } = await uploadVideo(req.file.buffer, `serenity/${slug}`);
+  listing.tourVideoUrl = url;
+  await listing.save();
+
+  return res.status(201).json({ data: { tourVideoUrl: url } });
 };
