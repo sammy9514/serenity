@@ -21,7 +21,7 @@ const variants: Record<Variant, string> = {
 };
 
 const base =
-  "inline-flex items-center justify-center gap-3 px-8 py-4 text-center font-medium disabled:opacity-50";
+  "inline-flex cursor-pointer items-center justify-center gap-3 px-8 py-4 text-center font-medium disabled:cursor-not-allowed disabled:opacity-50";
 
 const Button = ({
   variant = "primary",

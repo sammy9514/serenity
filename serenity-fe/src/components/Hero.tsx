@@ -11,10 +11,14 @@ const Hero = () => {
     queryFn: fetchListings,
   });
 
-  // one lead photo per apartment, so the hero shows both properties
-  const slides = (listings ?? [])
-    .map((listing) => listing.photos?.[0])
-    .filter((photo): photo is NonNullable<typeof photo> => Boolean(photo?.url));
+  // the cover photo of each apartment, then more from the first, up to four.
+  // the client controls these from the admin photo manager.
+  const slides = [
+    ...(listings ?? []).map((listing) => listing.photos?.[0]),
+    ...(listings?.[0]?.photos?.slice(1) ?? []),
+  ]
+    .filter((photo): photo is NonNullable<typeof photo> => Boolean(photo?.url))
+    .slice(0, 4);
 
   const [index, setIndex] = useState(0);
 
@@ -38,6 +42,7 @@ const Hero = () => {
           )}
           alt=""
           aria-hidden="true"
+          loading={i === 0 ? "eager" : "lazy"}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
             i === index ? "opacity-100" : "opacity-0"
           }`}
@@ -75,7 +80,7 @@ const Hero = () => {
               aria-label={`Show photo ${i + 1}`}
               aria-current={i === index}
               onClick={() => setIndex(i)}
-              className={`h-2 w-8 transition-opacity ${
+              className={`h-2 w-8 cursor-pointer transition-opacity ${
                 i === index ? "bg-cream" : "bg-cream/40 hover:bg-cream/70"
               }`}
             />
