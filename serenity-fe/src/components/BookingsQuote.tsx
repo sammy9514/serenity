@@ -28,6 +28,7 @@ const BookingsQuote = ({
 }: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const {
     data: quote,
@@ -57,7 +58,7 @@ const BookingsQuote = ({
       checkIn,
       checkOut,
       guests,
-      guest: { name, email },
+      guest: { name, email, phoneNumber },
     });
   };
 
@@ -187,7 +188,16 @@ const BookingsQuote = ({
                 placeholder="Your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="border-b border-line px-3 py-2 outline-none"
+                required
+              />
+              <input
+                type="tel"
+                placeholder="Your phone number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 className="px-3 py-2 outline-none"
+                autoComplete="tel"
                 required
               />
             </div>

@@ -28,7 +28,7 @@ const Amenities = ({ listing }: Props) => {
       {listing.amenities.length > preview.length && (
         <Link
           to={`/apartments/${listing.slug}/amenities`}
-          className="mt-8 inline-grid"
+          className="mt-8 inline-grid cursor-pointer"
         >
           <Button variant="secondary">
             Show all {listing.amenities.length} amenities

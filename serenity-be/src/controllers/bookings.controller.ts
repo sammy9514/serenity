@@ -80,11 +80,18 @@ export const createBooking = async (req: Request, res: Response) => {
         message: "guests name and email required",
       },
     });
-  if (!guest.name || !guest.email)
+  if (
+    typeof guest.name !== "string" ||
+    typeof guest.email !== "string" ||
+    typeof guest.phoneNumber !== "string" ||
+    !guest.name.trim() ||
+    !guest.email.trim() ||
+    !guest.phoneNumber.trim()
+  )
     return res.status(400).json({
       error: {
         code: "BAD_REQUEST",
-        message: "guests name and email required",
+        message: "guest name, email and phone number are required",
       },
     });
 

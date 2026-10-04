@@ -3,7 +3,7 @@ import { mailer } from "../utils/mailer";
 type BookingEmail = {
   reference: string;
   accessToken: string;
-  guest: { name: string; email: string };
+  guest: { name: string; email: string; phoneNumber?: string };
   checkIn: Date;
   checkOut: Date;
   nights: number;
@@ -90,7 +90,9 @@ export const sendHostNewRequest = (booking: BookingEmail) =>
     `
       <p style="font-size: 18px; margin: 0 0 16px;">New booking request</p>
       <p style="margin: 0 0 16px; line-height: 1.6;">
-        ${booking.guest.name} (${booking.guest.email}) has requested
+        ${booking.guest.name} (${booking.guest.email}${
+          booking.guest.phoneNumber ? ` · ${booking.guest.phoneNumber}` : ""
+        }) has requested
         ${booking.listingName}. Their card is authorised and waiting for your
         decision. If you do not respond within 48 hours the request expires and
         the authorisation is released.

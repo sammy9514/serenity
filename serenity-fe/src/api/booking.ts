@@ -27,7 +27,7 @@ export const getQuote = async (input: {
 };
 
 export const createBooking = async (input: {
-  guest: { name: string; email: string };
+  guest: { name: string; email: string; phoneNumber: string };
   listingSlug: string;
   checkIn: string;
   checkOut: string;

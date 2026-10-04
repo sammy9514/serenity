@@ -55,7 +55,11 @@ export const stripeWebhook = async (req: Request, res: Response) => {
           const payload = {
             reference: booking.reference,
             accessToken: booking.accessToken,
-            guest: { name: booking.guest.name, email: booking.guest.email },
+            guest: {
+              name: booking.guest.name,
+              email: booking.guest.email,
+              phoneNumber: booking.guest.phoneNumber,
+            },
             checkIn: booking.checkIn,
             checkOut: booking.checkOut,
             nights: booking.nights,

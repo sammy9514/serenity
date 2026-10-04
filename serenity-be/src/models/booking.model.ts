@@ -15,6 +15,8 @@ const bookingSchema = new Schema(
     guest: {
       name: { type: String, required: true },
       email: { type: String, required: true, lowercase: true },
+      // a string: phone numbers have leading zeros and + prefixes
+      phoneNumber: { type: String, required: true, trim: true },
     },
     guests: { type: Number, required: true, min: 1 },
     nights: { type: Number, required: true, min: 1 },

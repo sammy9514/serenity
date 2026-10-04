@@ -16,10 +16,10 @@ const Footer = () => {
             </a>{" "}
             ·{" "}
             <a
-              href="tel:+447700900000"
+              href="tel:+447854090571"
               className="underline underline-offset-4"
             >
-              +44 7700 900000
+              +447854090571
             </a>
           </span>
         </div>

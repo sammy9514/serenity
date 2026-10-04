@@ -11,7 +11,7 @@ const groups = [
   {
     title: "Cancellation",
     items: [
-      "Free cancellation up to [N] days before check-in.",
+      "Free cancellation up to 1 day before check-in.",
       "After that, the first night is non-refundable.",
     ],
   },

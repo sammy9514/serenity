@@ -7,12 +7,7 @@ type Props = {
 
 const WhereYouBe = ({ listing }: Props) => {
   const address = listing.address;
-  const lines = [
-    address?.line1,
-    address?.line2,
-    address?.town,
-    address?.postcode,
-  ].filter(Boolean);
+  const lines = [address?.town, address?.postcode].filter(Boolean);
 
   // the postcode alone places the pin accurately enough without publishing
   // the flat number to anyone browsing
