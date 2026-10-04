@@ -26,6 +26,7 @@ const listingsSchema = new Schema(
       town: String,
       postcode: String,
     },
+    rooms: [{ name: String, beds: String }],
     tourVideoUrl: String,
   },
   { timestamps: true },
