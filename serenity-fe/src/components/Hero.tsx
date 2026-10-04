@@ -11,13 +11,17 @@ const Hero = () => {
     queryFn: fetchListings,
   });
 
-  // the cover photo of each apartment, then more from the first, up to four.
-  // the client controls these from the admin photo manager.
-  const slides = [
-    ...(listings ?? []).map((listing) => listing.photos?.[0]),
-    ...(listings?.[0]?.photos?.slice(1) ?? []),
-  ]
-    .filter((photo): photo is NonNullable<typeof photo> => Boolean(photo?.url))
+  // one photo per room, so the hero shows variety rather than four living
+  // rooms. the client controls which by reordering photos in the admin.
+  const seen = new Set<string>();
+  const slides = (listings ?? [])
+    .flatMap((listing) => listing.photos ?? [])
+    .filter((photo) => {
+      const room = photo.room?.toLowerCase().trim();
+      if (!photo.url || !room || seen.has(room)) return false;
+      seen.add(room);
+      return true;
+    })
     .slice(0, 4);
 
   const [index, setIndex] = useState(0);
