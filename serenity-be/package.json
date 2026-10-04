@@ -8,7 +8,9 @@
     "start": "tsx src/index.ts",
     "seed": "tsx src/seed.ts",
     "expire": "tsx src/jobs/expire.ts",
-    "update-listings": "tsx src/jobs/updateListings.ts"
+    "update-listings": "tsx src/jobs/updateListings.ts",
+    "upload-tour": "tsx src/jobs/uploadTour.ts",
+    "update-content": "tsx src/jobs/updateContent.ts"
   },
   "keywords": [],
   "author": "",

@@ -16,6 +16,13 @@ export interface Listing {
   instantBook: boolean;
   photos: { _id: string; url: string; caption: string; room: string }[];
   amenities: { label: string; category: string }[];
+  address?: {
+    line1?: string;
+    line2?: string;
+    town?: string;
+    postcode?: string;
+  };
+  tourVideoUrl?: string;
 }
 
 export type Booking = {

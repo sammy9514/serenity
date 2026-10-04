@@ -20,6 +20,13 @@ const listingsSchema = new Schema(
     cleaningFee: { type: Number, default: 0 },
     photos: [{ url: String, caption: String, room: String, publicId: String }],
     amenities: [{ label: String, category: String }],
+    address: {
+      line1: String,
+      line2: String,
+      town: String,
+      postcode: String,
+    },
+    tourVideoUrl: String,
   },
   { timestamps: true },
 );

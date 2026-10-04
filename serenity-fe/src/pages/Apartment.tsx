@@ -37,7 +37,7 @@ const Apartment = () => {
         <div className="min-w-0">
           <AboutApartment listing={listing} />
           <WhereYouSleep />
-          <VirtualTour />
+          <VirtualTour listing={listing} />
           <AvailabilityCalendar
             listing={listing}
             checkIn={checkIn}
@@ -48,7 +48,7 @@ const Apartment = () => {
             }}
           />
           <Amenities listing={listing} />
-          <WhereYouBe />
+          <WhereYouBe listing={listing} />
           <ThingsToKnow />
         </div>
         <div id="booking" className="min-w-0 scroll-mt-6">
