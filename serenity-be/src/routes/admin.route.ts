@@ -5,6 +5,7 @@ import {
   deletePhoto,
   makeCoverPhoto,
   setTourVideo,
+  toggleHeroPhoto,
 } from "../controllers/photos.controller";
 import { login } from "../controllers/login.controller";
 import { requireAdmin } from "../middleware/requireAdmin";
@@ -45,6 +46,10 @@ router
 router
   .route("/admin/listings/:slug/photos/:photoId/cover")
   .patch(requireAdmin, makeCoverPhoto);
+
+router
+  .route("/admin/listings/:slug/photos/:photoId/hero")
+  .patch(requireAdmin, toggleHeroPhoto);
 
 router
   .route("/admin/listings/:slug/tour")

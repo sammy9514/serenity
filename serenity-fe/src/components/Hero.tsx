@@ -4,6 +4,7 @@ import Button from "./Button";
 import { fetchListings } from "../api/listings";
 
 const SLIDE_MS = 6000;
+const MAX_SLIDES = 6;
 
 const Hero = () => {
   const { data: listings } = useQuery({
@@ -11,18 +12,21 @@ const Hero = () => {
     queryFn: fetchListings,
   });
 
-  // one photo per room, so the hero shows variety rather than four living
-  // rooms. the client controls which by reordering photos in the admin.
+  const allPhotos = (listings ?? []).flatMap((listing) => listing.photos ?? []);
+
+  // the host picks these in the admin photo manager. if none are picked yet,
+  // fall back to one photo per room so the hero is never empty.
+  const chosen = allPhotos.filter((photo) => photo.inHero && photo.url);
+
   const seen = new Set<string>();
-  const slides = (listings ?? [])
-    .flatMap((listing) => listing.photos ?? [])
-    .filter((photo) => {
-      const room = photo.room?.toLowerCase().trim();
-      if (!photo.url || !room || seen.has(room)) return false;
-      seen.add(room);
-      return true;
-    })
-    .slice(0, 4);
+  const perRoom = allPhotos.filter((photo) => {
+    const room = photo.room?.toLowerCase().trim();
+    if (!photo.url || !room || seen.has(room)) return false;
+    seen.add(room);
+    return true;
+  });
+
+  const slides = (chosen.length > 0 ? chosen : perRoom).slice(0, MAX_SLIDES);
 
   const [index, setIndex] = useState(0);
 

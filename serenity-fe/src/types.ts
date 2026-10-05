@@ -14,7 +14,13 @@ export interface Listing {
   cleaningFee: number;
   minNights: number;
   instantBook: boolean;
-  photos: { _id: string; url: string; caption: string; room: string }[];
+  photos: {
+    _id: string;
+    url: string;
+    caption: string;
+    room: string;
+    inHero?: boolean;
+  }[];
   amenities: { label: string; category: string }[];
   address?: {
     line1?: string;

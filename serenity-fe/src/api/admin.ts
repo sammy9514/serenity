@@ -107,3 +107,17 @@ export const uploadTourVideo = async (input: { slug: string; file: File }) => {
     throw new Error(json?.error?.message ?? "Could not upload that video");
   return json.data;
 };
+
+export const toggleHeroPhoto = async (input: {
+  slug: string;
+  photoId: string;
+}) => {
+  const res = await fetch(
+    `${API_URL}/api/v1/admin/listings/${input.slug}/photos/${input.photoId}/hero`,
+    { method: "PATCH", credentials: "include" },
+  );
+  const json = await res.json();
+  if (!res.ok)
+    throw new Error(json?.error?.message ?? "Could not update the home page");
+  return json.data;
+};

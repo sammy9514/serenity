@@ -117,3 +117,29 @@ export const setTourVideo = async (req: Request, res: Response) => {
 
   return res.status(201).json({ data: { tourVideoUrl: url } });
 };
+
+export const toggleHeroPhoto = async (req: Request, res: Response) => {
+  const { slug, photoId } = req.params;
+
+  if (typeof slug !== "string" || typeof photoId !== "string")
+    return res
+      .status(400)
+      .json({ error: { code: "BAD_REQUEST", message: "invalid request" } });
+
+  const listing = await Listing.findOne({ slug });
+  if (!listing)
+    return res
+      .status(404)
+      .json({ error: { code: "NOT_FOUND", message: "listing not found" } });
+
+  const photo = listing.photos.id(photoId);
+  if (!photo)
+    return res
+      .status(404)
+      .json({ error: { code: "NOT_FOUND", message: "photo not found" } });
+
+  photo.inHero = !photo.inHero;
+  await listing.save();
+
+  return res.json({ data: { inHero: photo.inHero } });
+};

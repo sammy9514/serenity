@@ -18,7 +18,16 @@ const listingsSchema = new Schema(
     description: { type: [String], required: true },
     instantBook: { type: Boolean, required: true, default: false },
     cleaningFee: { type: Number, default: 0 },
-    photos: [{ url: String, caption: String, room: String, publicId: String }],
+    photos: [
+      {
+        url: String,
+        caption: String,
+        room: String,
+        publicId: String,
+        // chosen by the host to appear in the home page carousel
+        inHero: { type: Boolean, default: false },
+      },
+    ],
     amenities: [{ label: String, category: String }],
     address: {
       line1: String,

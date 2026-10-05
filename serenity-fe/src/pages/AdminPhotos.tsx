@@ -2,11 +2,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type React from "react";
 import { Link, useParams } from "react-router";
-import { LuChevronLeft, LuStar, LuTrash2 } from "react-icons/lu";
+import { LuChevronLeft, LuHouse, LuStar, LuTrash2 } from "react-icons/lu";
 import { fetchListing } from "../api/listings";
 import {
   deletePhoto,
   makeCoverPhoto,
+  toggleHeroPhoto,
   uploadPhoto,
   uploadTourVideo,
 } from "../api/admin";
@@ -67,7 +68,14 @@ const AdminPhotos = () => {
     onSuccess: refresh,
   });
 
-  const busy = remove.isPending || setCover.isPending;
+  const toggleHero = useMutation({
+    mutationFn: toggleHeroPhoto,
+    onSuccess: refresh,
+  });
+
+  const heroCount = listing?.photos.filter((photo) => photo.inHero).length ?? 0;
+
+  const busy = remove.isPending || setCover.isPending || toggleHero.isPending;
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -218,9 +226,9 @@ const AdminPhotos = () => {
           </p>
         </div>
 
-        {(remove.error || setCover.error) && (
+        {(remove.error || setCover.error || toggleHero.error) && (
           <p className="mt-3 text-sm text-red-700">
-            {(remove.error ?? setCover.error)?.message}
+            {(remove.error ?? setCover.error ?? toggleHero.error)?.message}
           </p>
         )}
 
@@ -236,11 +244,30 @@ const AdminPhotos = () => {
                 <span className="text-sm">
                   {photo.caption}
                   <span className="block text-xs text-ink/60">
-                    {index === 0 ? "Cover photo · " : ""}
+                    {index === 0 ? "Cover · " : ""}
+                    {photo.inHero ? "Home page · " : ""}
                     {photo.room}
                   </span>
                 </span>
                 <span className="flex shrink-0 gap-3">
+                  <button
+                    type="button"
+                    aria-label={
+                      photo.inHero
+                        ? `Remove ${photo.caption} from the home page`
+                        : `Show ${photo.caption} on the home page`
+                    }
+                    aria-pressed={photo.inHero}
+                    disabled={busy || (!photo.inHero && heroCount >= 6)}
+                    onClick={() => {
+                      if (slug) toggleHero.mutate({ slug, photoId: photo._id });
+                    }}
+                    className={`cursor-pointer disabled:opacity-40 ${
+                      photo.inHero ? "text-ink" : "text-ink/40 hover:text-ink"
+                    }`}
+                  >
+                    <LuHouse />
+                  </button>
                   {index !== 0 && (
                     <button
                       type="button"
