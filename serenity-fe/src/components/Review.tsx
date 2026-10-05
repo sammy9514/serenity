@@ -52,7 +52,6 @@ const reviews = [
   },
 ];
 
-const TOTAL_REVIEWS = 19;
 const AVERAGE = 5.0;
 
 const Stars = ({ rating }: { rating: number }) => (
@@ -79,7 +78,7 @@ const Review = () => {
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="flex items-center gap-3 font-display text-3xl">
           <LuStar className="h-5 w-5 fill-ink text-ink" />
-          {AVERAGE.toFixed(1)} · {TOTAL_REVIEWS} reviews
+          {AVERAGE.toFixed(1)} · {reviews.length} reviews
         </h2>
         <p className="text-sm text-ink/70">From our guests on Airbnb</p>
       </div>
@@ -115,7 +114,7 @@ const Review = () => {
           onClick={() => setShowAll(!showAll)}
           className="mt-8 cursor-pointer border border-ink px-6 py-3 text-sm font-medium"
         >
-          {showAll ? "Show fewer reviews" : `Show all ${TOTAL_REVIEWS} reviews`}
+          {showAll ? "Show fewer reviews" : `Show all ${reviews.length} reviews`}
         </button>
       )}
     </section>
