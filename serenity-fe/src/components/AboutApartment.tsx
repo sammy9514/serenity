@@ -97,7 +97,7 @@ const AboutApartment = ({ listing }: Props) => {
             type="button"
             onClick={() => setExpanded(!expanded)}
             aria-expanded={expanded}
-            className="mt-4 text-sm font-bold underline underline-offset-4 hidden"
+            className="mt-4 text-sm font-bold underline underline-offset-4 "
           >
             {expanded ? "Show less" : "Show more"}
           </button>
