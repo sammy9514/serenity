@@ -67,10 +67,10 @@ const AboutApartment = ({ listing }: Props) => {
       <div className="my-10 " />
       <div className="flex gap-4 items-center">
         <div className="w-16 h-16 rounded-full bg-ink flex justify-center items-center text-white ">
-          S
+          T
         </div>
         <div>
-          <h3 className="font-semibold text-lg ">Hosted by [HOST NAME]</h3>
+          <h3 className="font-semibold text-lg ">Hosted by Tosin</h3>
           <p className="text-sm ">
             Self check-in with a lockbox · Usually replies within an hour
           </p>
@@ -85,7 +85,7 @@ const AboutApartment = ({ listing }: Props) => {
           <p
             key={paragraph.slice(0, 40)}
             className={`mt-4 leading-relaxed first:mt-0 ${
-              i > 1 && !expanded ? "hidden sm:block" : ""
+              i > 1 && !expanded ? "hidden" : ""
             }`}
           >
             {paragraph}
@@ -97,7 +97,7 @@ const AboutApartment = ({ listing }: Props) => {
             type="button"
             onClick={() => setExpanded(!expanded)}
             aria-expanded={expanded}
-            className="mt-4 text-sm font-bold underline underline-offset-4 sm:hidden"
+            className="mt-4 text-sm font-bold underline underline-offset-4 hidden"
           >
             {expanded ? "Show less" : "Show more"}
           </button>
