@@ -12,6 +12,7 @@ import { useState } from "react";
 import WhereYouBe from "../components/WhereYouBe";
 import ThingsToKnow from "../components/ThingsToKnow";
 import Amenities from "../components/Amenities";
+import Review from "../components/Review";
 
 const Apartment = () => {
   const { slug } = useParams();
@@ -48,6 +49,7 @@ const Apartment = () => {
             }}
           />
           <Amenities listing={listing} />
+          <Review />
           <WhereYouBe listing={listing} />
           <ThingsToKnow />
         </div>
