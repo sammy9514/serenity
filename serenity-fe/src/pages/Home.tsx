@@ -1,6 +1,6 @@
 import AvailableApt from "../components/AvailableApt";
 import Hero from "../components/Hero";
-import WhyBookDirect from "../components/WhyBookDirect";
+import ThingsToDo from "../components/ThingsToDo";
 
 const Home = () => {
   return (
@@ -8,7 +8,7 @@ const Home = () => {
       <Hero />
       <div className=" mx-auto max-w-page px-6">
         <AvailableApt />
-        <WhyBookDirect />
+        <ThingsToDo />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 
 const links = [
   { label: "Apartments", href: "/#apartments" },
-  { label: "Why book direct", href: "/#why" },
+  { label: "Things to do", href: "/#things-to-do" },
   { label: "Contact", href: "/#contact" },
 ];
 
