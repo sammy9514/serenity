@@ -32,6 +32,14 @@ const Footer = () => {
           >
             Instagram
           </a>
+          <a
+            href="https://www.snapchat.com/add/cheunfunmieco?share_id=azmQ8IED7ig&locale=en-GB"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-cream"
+          >
+            Snapchat
+          </a>
           <a href="/#apartments" className="hover:text-cream">
             Apartments
           </a>

@@ -70,7 +70,9 @@ const AboutApartment = ({ listing }: Props) => {
           T
         </div>
         <div>
-          <h3 className="font-semibold text-lg ">Hosted by Tosin</h3>
+          <h3 className="font-semibold text-lg ">
+            Hosted by Serenity space luxury homes
+          </h3>
           <p className="text-sm ">
             Self check-in with a lockbox · Usually replies within an hour
           </p>
