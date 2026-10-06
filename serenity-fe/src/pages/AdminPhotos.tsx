@@ -19,7 +19,7 @@ const rooms = [
   "Second bedroom",
   "Kitchen",
   "Bathrooms",
-  "Garden",
+  "Balcony",
   "Other",
 ];
 
