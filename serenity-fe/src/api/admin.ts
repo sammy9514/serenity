@@ -14,11 +14,15 @@ export const admin = async (input: { email: string; password: string }) => {
   return json.data;
 };
 
-export const fetchAdminBookings = async (
-  status?: string,
-): Promise<AdminBooking[]> => {
-  const query = status ? `?status=${status}` : "";
-  const res = await fetch(`${API_URL}/api/v1/admin/bookings${query}`, {
+export const fetchAdminBookings = async (params: {
+  status?: string;
+  paymentStatus?: string;
+}): Promise<AdminBooking[]> => {
+  const query = new URLSearchParams();
+  if (params.status) query.set("status", params.status);
+  if (params.paymentStatus) query.set("paymentStatus", params.paymentStatus);
+  const suffix = query.toString() ? `?${query}` : "";
+  const res = await fetch(`${API_URL}/api/v1/admin/bookings${suffix}`, {
     credentials: "include",
   });
   const json = await res.json();

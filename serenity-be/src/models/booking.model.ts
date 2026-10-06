@@ -2,6 +2,25 @@
 
 import { model, Schema } from "mongoose";
 
+// the single source of truth: the schema validates against these, and so do
+// the admin filters, so the two can never drift apart
+export const BOOKING_STATUSES = [
+  "requested",
+  "confirmed",
+  "declined",
+  "expired",
+  "cancelled",
+] as const;
+
+export const PAYMENT_STATUSES = [
+  "none",
+  "pending",
+  "authorised",
+  "captured",
+  "released",
+  "refunded",
+] as const;
+
 const bookingSchema = new Schema(
   {
     listing: { type: Schema.Types.ObjectId, ref: "Listing", required: true },
@@ -9,7 +28,7 @@ const bookingSchema = new Schema(
     checkOut: { type: Date, required: true },
     status: {
       type: String,
-      enum: ["requested", "confirmed", "declined", "expired", "cancelled"],
+      enum: BOOKING_STATUSES,
       default: "requested",
     },
     guest: {
@@ -28,14 +47,7 @@ const bookingSchema = new Schema(
     paymentIntentId: { type: String },
     paymentStatus: {
       type: String,
-      enum: [
-        "none",
-        "pending",
-        "authorised",
-        "captured",
-        "released",
-        "refunded",
-      ],
+      enum: PAYMENT_STATUSES,
       default: "none",
     },
     expiresAt: { type: Date },

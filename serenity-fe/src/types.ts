@@ -62,6 +62,9 @@ export type BookedRange = {
 export type BookingStatus =
   "requested" | "confirmed" | "declined" | "expired" | "cancelled";
 
+export type PaymentStatus =
+  "none" | "pending" | "authorised" | "captured" | "released" | "refunded";
+
 export type AdminBooking = {
   _id: string;
   reference: string;
@@ -75,6 +78,7 @@ export type AdminBooking = {
   subtotal: number;
   total: number;
   status: BookingStatus;
+  paymentStatus: PaymentStatus;
   expiresAt?: string;
   createdAt: string;
   updatedAt: string;
