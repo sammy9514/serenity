@@ -12,7 +12,8 @@
     "upload-tour": "tsx src/jobs/uploadTour.ts",
     "update-content": "tsx src/jobs/updateContent.ts",
     "upload-photos": "tsx src/jobs/uploadPhotos.ts",
-    "update-rooms": "tsx src/jobs/updateRooms.ts"
+    "update-rooms": "tsx src/jobs/updateRooms.ts",
+    "reconcile-refunds": "tsx src/jobs/reconcileRefunds.ts"
   },
   "keywords": [],
   "author": "",
