@@ -14,7 +14,8 @@
     "upload-photos": "tsx src/jobs/uploadPhotos.ts",
     "update-rooms": "tsx src/jobs/updateRooms.ts",
     "reconcile-refunds": "tsx src/jobs/reconcileRefunds.ts",
-    "rename-seafront": "tsx src/jobs/renameSeafront.ts"
+    "rename-seafront": "tsx src/jobs/renameSeafront.ts",
+    "cancel-booking": "tsx src/jobs/cancelBooking.ts"
   },
   "keywords": [],
   "author": "",

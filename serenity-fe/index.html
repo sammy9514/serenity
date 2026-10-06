@@ -46,6 +46,31 @@
       name="twitter:image"
       content="https://res.cloudinary.com/kbc3bfiv/image/upload/c_fill,g_auto,w_1200,h_630,f_jpg,q_auto/serenity/serenity-waterfront-penthouse/ze7f2djactfjfxecpjh2.jpg"
     />
+
+    <!-- tells google this is lodging, not a blog about apartments -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LodgingBusiness",
+        "name": "Serenity Space Luxury Homes",
+        "description": "Two luxury two-bedroom penthouse apartments on the Thames Estuary in Northfleet, Kent.",
+        "url": "https://serenityspaceluxuryhomes.com/",
+        "email": "info@serenityspaceluxuryhomes.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Northfleet",
+          "addressRegion": "Kent",
+          "addressCountry": "GB"
+        },
+        "numberOfRooms": 2,
+        "petsAllowed": false,
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "reviewCount": "6"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

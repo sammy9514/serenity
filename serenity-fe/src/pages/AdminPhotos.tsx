@@ -12,6 +12,7 @@ import {
   uploadTourVideo,
 } from "../api/admin";
 import Button from "../components/Button";
+import { usePageMeta } from "../hooks/usePageMeta";
 
 const rooms = [
   "Living room",
@@ -24,6 +25,8 @@ const rooms = [
 ];
 
 const AdminPhotos = () => {
+  usePageMeta({ title: "Photos · Admin", path: "/admin", noIndex: true });
+
   const { slug } = useParams();
   const queryClient = useQueryClient();
 

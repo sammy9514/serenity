@@ -13,6 +13,7 @@ import WhereYouBe from "../components/WhereYouBe";
 import ThingsToKnow from "../components/ThingsToKnow";
 import Amenities from "../components/Amenities";
 import Review from "../components/Review";
+import { usePageMeta } from "../hooks/usePageMeta";
 
 const Apartment = () => {
   const { slug } = useParams();
@@ -28,6 +29,15 @@ const Apartment = () => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(1);
+
+  usePageMeta({
+    title: listing
+      ? `${listing.name} · Serenity Space Luxury Homes`
+      : "Serenity Space Luxury Homes",
+    description: listing?.summary,
+    path: `/apartments/${slug}`,
+    image: listing?.photos?.[0]?.url,
+  });
 
   if (isPending) return <p>Loading…</p>;
   if (isError) return <p>Couldn't load this apartment.</p>;
