@@ -4,8 +4,8 @@ import { Listing } from "../models/listings.model";
 
 // the client asked for the capital H
 const names: Record<string, string> = {
-  "serenity-waterfront-penthouse": "Serenity Waterfront 2 Bed Luxury PentHouse",
-  "serenity-seafront-apartment": "Serenity Seafront 2 Bed Luxury PentHouse",
+  "serenity-waterfront-penthouse": "Serenity Waterfront 2 Bed Luxury PentHouse Apartment",
+  "serenity-seafront-apartment": "Serenity Seafront 2 Bed Luxury PentHouse Apartment",
 };
 
 const run = async () => {
