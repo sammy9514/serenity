@@ -48,8 +48,7 @@ const Hero = () => {
             "/image/upload/",
             "/image/upload/c_fill,g_auto,f_auto,q_auto,w_2000/",
           )}
-          alt=""
-          aria-hidden="true"
+          alt={photo.caption ?? ""}
           loading={i === 0 ? "eager" : "lazy"}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
             i === index ? "opacity-100" : "opacity-0"

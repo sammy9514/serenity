@@ -9,6 +9,7 @@ import {
 } from "../api/admin";
 import Button from "../components/Button";
 import type { AdminBooking as Booking } from "../types";
+import { usePageMeta } from "../hooks/usePageMeta";
 
 // a filter narrows by booking status or by payment status, never both
 const filters = [
@@ -44,6 +45,8 @@ const badgeFor = (booking: Booking) =>
   booking.paymentStatus === "refunded" ? "refunded" : booking.status;
 
 const AdminBooking = () => {
+  usePageMeta({ title: "Bookings · Admin", path: "/admin", noIndex: true });
+
   const [filter, setFilter] = useState(filters[0]);
   const queryClient = useQueryClient();
 

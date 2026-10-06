@@ -4,8 +4,11 @@ import type React from "react";
 import { useNavigate } from "react-router";
 import { admin } from "../api/admin";
 import Button from "../components/Button";
+import { usePageMeta } from "../hooks/usePageMeta";
 
 const AdminLogin = () => {
+  usePageMeta({ title: "Sign in · Admin", path: "/admin", noIndex: true });
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

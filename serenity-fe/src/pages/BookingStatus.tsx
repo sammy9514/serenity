@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "react-router";
 import { fetchBookingByReference } from "../api/booking";
 import type { BookingSummary } from "../types";
+import { usePageMeta } from "../hooks/usePageMeta";
 
 const messages: Record<BookingSummary["status"], string> = {
   requested:
@@ -22,6 +23,12 @@ const formatDate = (iso: string) =>
   });
 
 const BookingStatus = () => {
+  usePageMeta({
+    title: "Your booking · Serenity Space",
+    path: "/bookings",
+    noIndex: true,
+  });
+
   const { reference } = useParams();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") ?? "";
