@@ -10,7 +10,11 @@ import {
   makeReference,
 } from "../services/booking.service";
 import { Types } from "mongoose";
-import { Booking } from "../models/booking.model";
+import {
+  Booking,
+  BOOKING_STATUSES,
+  PAYMENT_STATUSES,
+} from "../models/booking.model";
 import type { QueryFilter } from "mongoose";
 import { stripe } from "../utils/stripe";
 
@@ -209,17 +213,27 @@ export const decline = async (req: Request, res: Response) => {
 //Types.ObjectId.isValid(id) used because the id it's expecting is Types.ObjectId
 
 export const getBookings = async (req: Request, res: Response) => {
-  const { status, limit } = req.query;
+  const { status, paymentStatus, limit } = req.query;
+
   if (
     status !== undefined &&
     (typeof status !== "string" ||
-      !["requested", "confirmed", "declined", "expired", "cancelled"].includes(
-        status,
-      ))
+      !BOOKING_STATUSES.includes(status as (typeof BOOKING_STATUSES)[number]))
   )
     return res
       .status(400)
       .json({ error: { code: "BAD_REQUEST", message: "invalid status" } });
+
+  if (
+    paymentStatus !== undefined &&
+    (typeof paymentStatus !== "string" ||
+      !PAYMENT_STATUSES.includes(
+        paymentStatus as (typeof PAYMENT_STATUSES)[number],
+      ))
+  )
+    return res.status(400).json({
+      error: { code: "BAD_REQUEST", message: "invalid payment status" },
+    });
 
   if (limit !== undefined && Number.isNaN(Number(limit)))
     return res.status(400).json({
@@ -230,6 +244,7 @@ export const getBookings = async (req: Request, res: Response) => {
 
   const filter: QueryFilter<typeof Booking> = {};
   if (status) filter.status = status;
+  if (paymentStatus) filter.paymentStatus = paymentStatus;
 
   const booking = await Booking.find(filter)
     .sort({ createdAt: -1 })

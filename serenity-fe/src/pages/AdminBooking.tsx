@@ -10,11 +10,13 @@ import {
 import Button from "../components/Button";
 import type { AdminBooking as Booking } from "../types";
 
+// a filter narrows by booking status or by payment status, never both
 const filters = [
-  { value: "requested", label: "Requested" },
-  { value: "confirmed", label: "Confirmed" },
-  { value: "declined", label: "Declined" },
-  { value: "", label: "All" },
+  { label: "Requested", status: "requested" },
+  { label: "Confirmed", status: "confirmed" },
+  { label: "Declined", status: "declined" },
+  { label: "Refunded", paymentStatus: "refunded" },
+  { label: "All" },
 ];
 
 const formatDate = (iso: string) =>
@@ -24,16 +26,25 @@ const formatDate = (iso: string) =>
     year: "numeric",
   });
 
-const statusStyles: Record<Booking["status"], string> = {
+const faded = "border border-line text-ink/60";
+
+// keyed by whichever label the badge ends up showing, so it holds both
+// booking statuses and the one payment status we surface
+const badgeStyles: Record<string, string> = {
   requested: "bg-taupe text-ink",
   confirmed: "bg-ink text-cream",
-  declined: "border border-line text-ink/60",
-  expired: "border border-line text-ink/60",
-  cancelled: "border border-line text-ink/60",
+  declined: faded,
+  expired: faded,
+  cancelled: faded,
+  refunded: faded,
 };
 
+// a refund is the more useful fact for the host than the cancellation it caused
+const badgeFor = (booking: Booking) =>
+  booking.paymentStatus === "refunded" ? "refunded" : booking.status;
+
 const AdminBooking = () => {
-  const [status, setStatus] = useState("requested");
+  const [filter, setFilter] = useState(filters[0]);
   const queryClient = useQueryClient();
 
   const { data: listings } = useQuery({
@@ -46,8 +57,12 @@ const AdminBooking = () => {
     isPending,
     isError,
   } = useQuery({
-    queryKey: ["adminBookings", status],
-    queryFn: () => fetchAdminBookings(status),
+    queryKey: ["adminBookings", filter.status, filter.paymentStatus],
+    queryFn: () =>
+      fetchAdminBookings({
+        status: filter.status,
+        paymentStatus: filter.paymentStatus,
+      }),
   });
 
   const invalidate = () =>
@@ -92,13 +107,13 @@ const AdminBooking = () => {
 
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
         <div className="flex flex-wrap gap-2">
-          {filters.map((filter) => (
+          {filters.map((option) => (
             <Button
-              key={filter.label}
-              variant={filter.value === status ? "primary" : "secondary"}
-              onClick={() => setStatus(filter.value)}
+              key={option.label}
+              variant={option.label === filter.label ? "primary" : "secondary"}
+              onClick={() => setFilter(option)}
             >
-              {filter.label}
+              {option.label}
             </Button>
           ))}
         </div>
@@ -131,9 +146,9 @@ const AdminBooking = () => {
                   <p className="text-sm text-ink/70">{booking.guest.email}</p>
                 </div>
                 <span
-                  className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${statusStyles[booking.status]}`}
+                  className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest ${badgeStyles[badgeFor(booking)] ?? faded}`}
                 >
-                  {booking.status}
+                  {badgeFor(booking)}
                 </span>
               </div>
 
