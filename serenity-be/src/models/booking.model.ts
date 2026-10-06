@@ -28,7 +28,14 @@ const bookingSchema = new Schema(
     paymentIntentId: { type: String },
     paymentStatus: {
       type: String,
-      enum: ["none", "pending", "authorised", "captured", "released"],
+      enum: [
+        "none",
+        "pending",
+        "authorised",
+        "captured",
+        "released",
+        "refunded",
+      ],
       default: "none",
     },
     expiresAt: { type: Date },

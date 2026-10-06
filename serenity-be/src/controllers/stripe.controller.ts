@@ -73,5 +73,27 @@ export const stripeWebhook = async (req: Request, res: Response) => {
     }
   }
 
+  if (event.type === "charge.refunded") {
+    const charge = event.data.object as Stripe.Charge;
+    const paymentIntentId =
+      typeof charge.payment_intent === "string"
+        ? charge.payment_intent
+        : charge.payment_intent?.id;
+
+    if (paymentIntentId) {
+      const fullyRefunded = charge.amount_refunded === charge.amount;
+      await Booking.updateOne(
+        { paymentIntentId },
+        {
+          paymentStatus: "refunded",
+          ...(fullyRefunded ? { status: "cancelled" } : {}),
+        },
+      );
+      console.log(
+        `booking with intent ${paymentIntentId} → refunded${fullyRefunded ? " (dates freed)" : " (partial)"}`,
+      );
+    }
+  }
+
   return res.json({ received: true });
 };
