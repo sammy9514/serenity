@@ -14,7 +14,11 @@ export const login = async (req: Request, res: Response) => {
       error: { code: "BAD_REQUEST", message: "password must be string" },
     });
 
-  if (email !== process.env.ADMIN_EMAIL)
+  // email case is not meaningful in practice, and the client will type his
+  // address however his keyboard feels that morning
+  const normalise = (value: string) => value.trim().toLowerCase();
+
+  if (normalise(email) !== normalise(String(process.env.ADMIN_EMAIL)))
     return res.status(401).json({
       error: { code: "UNAUTHORISED", message: "incorrect user details" },
     });
